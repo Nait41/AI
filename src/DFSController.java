@@ -1,6 +1,7 @@
 import domain.TablesData;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -8,9 +9,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainController {
+public class DFSController {
 
     @FXML
     private Button closeButton;
@@ -19,10 +21,13 @@ public class MainController {
     private AnchorPane mainPanel;
 
     @FXML
-    private TableView<TablesData> mainTable_1;
+    private Label costInfoForDirect;
 
     @FXML
-    private TableView<TablesData> mainTable_10;
+    private Label costInfoReverse;
+
+    @FXML
+    private TableView<TablesData> mainTable_1;
 
     @FXML
     private TableView<TablesData> mainTable_2;
@@ -36,18 +41,6 @@ public class MainController {
     @FXML
     private TableView<TablesData> mainTable_5;
 
-    @FXML
-    private TableView<TablesData> mainTable_6;
-
-    @FXML
-    private TableView<TablesData> mainTable_7;
-
-    @FXML
-    private TableView<TablesData> mainTable_8;
-
-    @FXML
-    private TableView<TablesData> mainTable_9;
-
     ArrayList<TableView<TablesData>> tableList = new ArrayList<>();
 
     @FXML
@@ -56,7 +49,7 @@ public class MainController {
     @FXML
     private Button runStep;
 
-    public MainController(){
+    public DFSController(){
     }
 
     public void tableInit() {
@@ -65,11 +58,6 @@ public class MainController {
         tableList.add(mainTable_3);
         tableList.add(mainTable_4);
         tableList.add(mainTable_5);
-        tableList.add(mainTable_6);
-        tableList.add(mainTable_7);
-        tableList.add(mainTable_8);
-        tableList.add(mainTable_9);
-        tableList.add(mainTable_10);
         for (int i = 0; i < tableList.size(); i++){
             TableColumn firstColumn = new TableColumn("");
             TableColumn secondColumn = new TableColumn("");
@@ -125,6 +113,12 @@ public class MainController {
         });
 
         closeButton.setOnAction(ActionEvent -> {
+            ChoiceApp choiceApp = new ChoiceApp();
+            try {
+                choiceApp.start(new Stage());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             Stage stage = (Stage) closeButton.getScene().getWindow();
             stage.close();
         });

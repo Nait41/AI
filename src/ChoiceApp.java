@@ -1,7 +1,6 @@
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -9,12 +8,12 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
-public class Application extends javafx.application.Application {
+public class ChoiceApp extends javafx.application.Application {
     private double xOffset;
     private double yOffset;
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("panes/hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(DFSApp.class.getResource("panes/choice.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("GenTest");
         scene.setFill(Color.TRANSPARENT);
@@ -33,7 +32,6 @@ public class Application extends javafx.application.Application {
                 stage.setY(event.getScreenY() + yOffset);
             }
         });
-        stage.getIcons().add(new Image("file:///C:\\Program Files\\genpass_obr\\AppIcon.png"));
         stage.setScene(scene);
         stage.show();
     }
