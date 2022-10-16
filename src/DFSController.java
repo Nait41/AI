@@ -1,4 +1,8 @@
 import domain.TablesData;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -7,6 +11,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Pair;
+import tree.Node;
+import tree.search.DeepFirstSearch;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -122,5 +129,51 @@ public class DFSController {
             Stage stage = (Stage) closeButton.getScene().getWindow();
             stage.close();
         });
+    }
+
+    // TODO temporary code ALERT temporary code for testing
+    @FXML
+    protected void onRunAutoButtonClick() {
+        runAuto.setDisable(true);
+        runAuto.setStyle("-fx-background-color: #ff0000; ");
+        MyService service = new MyService();
+        service.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+            @Override
+            public void handle(WorkerStateEvent t) {
+                runAuto.setStyle("-fx-background-color: #FFA500; ");
+                runAuto.setDisable(false);
+            }
+        });
+        service.start();
+    }
+
+    private static class MyService extends Service {
+
+        @Override
+        protected Task createTask() {
+            return new Task() {
+                @Override
+                protected Object call() throws Exception {
+                    ArrayList<ArrayList<Integer>> initState = new ArrayList<>() {{
+                        add(new ArrayList<>(){{add(6); add(0); add(8);}});
+                        add(new ArrayList<>(){{add(5); add(2); add(1);}});
+                        add(new ArrayList<>(){{add(4); add(3); add(7);}});
+                    }};
+                    ArrayList<ArrayList<Integer>> goalState = new ArrayList<>() {{
+                        add(new ArrayList<>(){{add(1); add(2); add(3);}});
+                        add(new ArrayList<>(){{add(8); add(0); add(4);}});
+                        add(new ArrayList<>(){{add(7); add(6); add(5);}});
+                    }};
+                    Pair<Integer,Integer> initEmptyIndexes = new Pair<>(0,1);
+                    Pair<Integer,Integer> goalEmptyIndexes = new Pair<>(1,1);
+                    Node initNode = new Node(initState,initEmptyIndexes);
+                    Node goalNode = new Node(goalState,goalEmptyIndexes);
+                    DeepFirstSearch search = new DeepFirstSearch(initNode,goalNode);
+                    search.Start();
+                    return null;
+                }
+            };
+        }
     }
 }
