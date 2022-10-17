@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 import tree.Node;
 import tree.search.DeepFirstSearch;
+import tree.search.Search;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -55,9 +56,6 @@ public class DFSController {
 
     @FXML
     private Button runStep;
-
-    public DFSController(){
-    }
 
     public void tableInit() {
         tableList.add(mainTable_1);
@@ -110,9 +108,18 @@ public class DFSController {
     void initialize() throws FileNotFoundException, InterruptedException {
         tableInit();
         setValueInTable(mainTable_1, 0, 1, "2");
-
+        mainTable_1.setDisable(true);
         runAuto.setOnAction(ActionEvent -> {
-
+            runAuto.setDisable(true);
+            //mainTable_1.setDisable(true);
+            //runAuto.setStyle("-fx-background-color: #ff0000; ");
+            MyService service = new MyService();
+            service.setOnSucceeded((EventHandler<WorkerStateEvent>) t -> {
+                //runAuto.setStyle("-fx-background-color: #FFA500; ");
+                //mainTable_1.setDisable(false);
+                runAuto.setDisable(false);
+            });
+            service.start();
         });
 
         runStep.setOnAction(ActionEvent -> {
@@ -131,24 +138,13 @@ public class DFSController {
         });
     }
 
-    // TODO temporary code ALERT temporary code for testing
-    @FXML
-    protected void onRunAutoButtonClick() {
-        runAuto.setDisable(true);
-        runAuto.setStyle("-fx-background-color: #ff0000; ");
-        MyService service = new MyService();
-        service.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-
-            @Override
-            public void handle(WorkerStateEvent t) {
-                runAuto.setStyle("-fx-background-color: #FFA500; ");
-                runAuto.setDisable(false);
-            }
-        });
-        service.start();
-    }
-
-    private static class MyService extends Service {
+    private class MyService extends Service {
+        protected void SetTableData(TableView<TablesData> table, Node node) {
+            for (int i = 0; i < 3; ++i)
+                for (int j = 0; j < 3; ++j)
+                    table.getItems().get(i).setColumn(j, node.getState().get(i).get(j).toString());
+            table.refresh();
+        }
 
         @Override
         protected Task createTask() {
@@ -167,10 +163,33 @@ public class DFSController {
                     }};
                     Pair<Integer,Integer> initEmptyIndexes = new Pair<>(0,1);
                     Pair<Integer,Integer> goalEmptyIndexes = new Pair<>(1,1);
+                    /*ArrayList<ArrayList<Integer>> initState = new ArrayList<>() {{
+                        add(new ArrayList<>(){{add(7); add(4); add(2);}});
+                        add(new ArrayList<>(){{add(3); add(5); add(8);}});
+                        add(new ArrayList<>(){{add(6); add(0); add(1);}});
+                    }};
+                    ArrayList<ArrayList<Integer>> goalState = new ArrayList<>() {{
+                        add(new ArrayList<>(){{add(1); add(2); add(3);}});
+                        add(new ArrayList<>(){{add(4); add(0); add(5);}});
+                        add(new ArrayList<>(){{add(6); add(7); add(8);}});
+                    }};
+                    Pair<Integer,Integer> initEmptyIndexes = new Pair<>(2,1);
+                    Pair<Integer,Integer> goalEmptyIndexes = new Pair<>(1,1);*/
                     Node initNode = new Node(initState,initEmptyIndexes);
                     Node goalNode = new Node(goalState,goalEmptyIndexes);
-                    DeepFirstSearch search = new DeepFirstSearch(initNode,goalNode);
-                    search.Start();
+                    Search search = new DeepFirstSearch(initNode,goalNode);
+                    while (search.Next()) {
+                        /*for (int i = 0; i < 3; ++i) {
+                            mainTable_1.getItems().get(i).
+                                    setFirstColumn(search.getCurrentNode().getState().get(i).get(0).toString());
+                            mainTable_1.getItems().get(i).
+                                    setSecondColumn(search.getCurrentNode().getState().get(i).get(1).toString());
+                            mainTable_1.getItems().get(i).
+                                    setThirdColumn(search.getCurrentNode().getState().get(i).get(2).toString());
+                        }
+                        mainTable_1.refresh();*/
+                    }
+                    SetTableData(mainTable_1, search.getCurrentNode());
                     return null;
                 }
             };

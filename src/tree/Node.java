@@ -13,6 +13,7 @@ public class Node {
     private Node parent;
     private Action generatingAction;
     private int pathCost = 0;
+    private int depth = 0;
     private int createIndex = 0;
     static private final ArrayList<Action> createActions;
 
@@ -35,12 +36,14 @@ public class Node {
                 Pair<Integer,Integer> emptyIndexes,
                 Node parent,
                 Action generatingAction,
-                int pathCost)
+                int pathCost,
+                int depth)
     {
         this(state, emptyIndexes);
         this.parent = parent;
         this.generatingAction = generatingAction;
         this.pathCost = pathCost;
+        this.depth = depth;
     }
 
     public Node getNextValidChild() {
@@ -111,6 +114,14 @@ public class Node {
         this.createIndex = createIndex;
     }
 
+    public int getDepth() {
+        return depth;
+    }
+
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -125,5 +136,10 @@ public class Node {
                     return false;
 
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(state);
     }
 }

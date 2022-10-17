@@ -8,30 +8,34 @@ import java.util.Stack;
 
 public class DeepFirstSearch extends Search {
     protected Node solutionNode;
+    protected HashSet<Node> nodes;
+    protected Stack<Node> searchStack;
 
     public DeepFirstSearch(Node initNode, Node goalNode) {
         super(initNode, goalNode);
-    }
-
-    public void Start() {
-        boolean isGoal = false;
-        HashSet<Node> nodes = new HashSet<>();
-        Stack<Node> searchStack = new Stack<>();
+        nodes = new HashSet<>();
+        searchStack = new Stack<>();
         nodes.add(initNode);
         searchStack.add(initNode);
-        while (!searchStack.isEmpty() && !isGoal) {
-            Node node = searchStack.pop();
-            ArrayList<Node> childs = node.getRemainingValidChilds();
+    }
+
+    public boolean Next() {
+        if (!searchStack.isEmpty() && !isOver) {
+            currentNode = searchStack.pop();
+            ArrayList<Node> childs = currentNode.getRemainingValidChilds();
             for (var child : childs) {
                 if (IsGoal(child)) {
                     solutionNode = child;
-                    isGoal = true;
+                    isOver = true;
                     break;
                 } else if (!nodes.contains(child)) {
                     nodes.add(child);
                     searchStack.add(child);
                 }
             }
+        } else if (searchStack.isEmpty()) {
+            isOver = true;
         }
+        return !isOver;
     }
 }
