@@ -51,7 +51,7 @@
             <Font name="Impact" size="20.0" />
          </font>
       </Label>
-      <Label layoutX="213.0" layoutY="431.0" text="Глубина:" textFill="ORANGE">
+      <Label fx:id="directDepthLabel" layoutX="213.0" layoutY="431.0" text="Глубина: " textFill="ORANGE">
          <font>
             <Font name="Impact" size="20.0" />
          </font>
@@ -66,7 +66,7 @@
             <Font name="Impact" size="20.0" />
          </font>
       </Label>
-      <Label layoutX="712.0" layoutY="431.0" text="Глубина:" textFill="ORANGE">
+      <Label fx:id="reverseDepthLabel" layoutX="712.0" layoutY="431.0" text="Глубина: " textFill="ORANGE">
          <font>
             <Font name="Impact" size="20.0" />
          </font>

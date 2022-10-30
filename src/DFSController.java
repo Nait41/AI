@@ -14,25 +14,25 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 import tree.Node;
 import tree.search.DeepFirstSearch;
-import tree.search.Search;
+import tree.search.UnidirectionalSearch;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class DFSController {
+public class DFSController extends SearchController {
+
+    @FXML
+    private Label depthLabel;
+
+    @FXML
+    private Label costInfo;
 
     @FXML
     private Button closeButton;
 
     @FXML
     private AnchorPane mainPanel;
-
-    @FXML
-    private Label costInfoForDirect;
-
-    @FXML
-    private Label costInfoReverse;
 
     @FXML
     private TableView<TablesData> mainTable_1;
@@ -63,67 +63,80 @@ public class DFSController {
         tableList.add(mainTable_3);
         tableList.add(mainTable_4);
         tableList.add(mainTable_5);
-        for (int i = 0; i < tableList.size(); i++){
-            TableColumn firstColumn = new TableColumn("");
-            TableColumn secondColumn = new TableColumn("");
-            TableColumn thirdColumn = new TableColumn("");
-            firstColumn.setCellValueFactory(new PropertyValueFactory<TablesData,String>("firstColumn"));
-            secondColumn.setCellValueFactory(new PropertyValueFactory<TablesData,String>("secondColumn"));
-            thirdColumn.setCellValueFactory(new PropertyValueFactory<TablesData,String>("thirdColumn"));
-            firstColumn.setPrefWidth(32);
-            secondColumn.setPrefWidth(32);
-            thirdColumn.setPrefWidth(32);
-            tableList.get(i).getColumns().add(firstColumn);
-            tableList.get(i).getColumns().add(secondColumn);
-            tableList.get(i).getColumns().add(thirdColumn);
-            TablesData tablesDataForFirst = new TablesData();
-            tablesDataForFirst.setFirstColumn("1");
-            tablesDataForFirst.setSecondColumn("1");
-            tablesDataForFirst.setThirdColumn("1");
-            tableList.get(i).getItems().add(tablesDataForFirst);
-            TablesData tablesDataForSecond = new TablesData();
-            tablesDataForSecond.setFirstColumn("1");
-            tablesDataForSecond.setSecondColumn("1");
-            tablesDataForSecond.setThirdColumn("1");
-            tableList.get(i).getItems().add(tablesDataForSecond);
-            TablesData tablesDataForThird = new TablesData();
-            tablesDataForThird.setFirstColumn("1");
-            tablesDataForThird.setSecondColumn("1");
-            tablesDataForThird.setThirdColumn("1");
-            tableList.get(i).getItems().add(tablesDataForThird);
+        for (var table : tableList){
+            ArrayList<TableColumn<TablesData, String>> columnsList = new ArrayList<>() {{
+                add(new TableColumn<>(""));
+                add(new TableColumn<>(""));
+                add(new TableColumn<>(""));
+            }};
+            columnsList.get(0).setCellValueFactory(new PropertyValueFactory<TablesData,String>("firstColumn"));
+            columnsList.get(1).setCellValueFactory(new PropertyValueFactory<TablesData,String>("secondColumn"));
+            columnsList.get(2).setCellValueFactory(new PropertyValueFactory<TablesData,String>("thirdColumn"));
+            for (var column : columnsList) {
+                column.setPrefWidth(32);
+                table.getColumns().add(column);
+                table.getItems().add(new TablesData());
+            }
         }
     }
 
-    public void setValueInTable(TableView<TablesData> currentTable, int row, int column, String newValue){
-        if (column == 0){
-            currentTable.getItems().get(row).setFirstColumn(newValue);
-        } else if (column == 1){
-            currentTable.getItems().get(row).setSecondColumn(newValue);
-        } else if (column == 2){
-            currentTable.getItems().get(row).setThirdColumn(newValue);
-        }
-    }
+    // TODO temp
+    ArrayList<ArrayList<Integer>> initState = new ArrayList<>() {{
+        add(new ArrayList<>(){{add(6); add(0); add(8);}});
+        add(new ArrayList<>(){{add(5); add(2); add(1);}});
+        add(new ArrayList<>(){{add(4); add(3); add(7);}});
+    }};
+    ArrayList<ArrayList<Integer>> goalState = new ArrayList<>() {{
+        add(new ArrayList<>(){{add(1); add(2); add(3);}});
+        add(new ArrayList<>(){{add(8); add(0); add(4);}});
+        add(new ArrayList<>(){{add(7); add(6); add(5);}});
+    }};
+    Node initNode = new Node(initState, new Pair<>(0,1));
+    Node goalNode = new Node(goalState, new Pair<>(1,1));
+    UnidirectionalSearch search = new DeepFirstSearch(initNode,goalNode);
 
     @FXML
     void initialize() throws FileNotFoundException, InterruptedException {
         tableInit();
-        setValueInTable(mainTable_1, 0, 1, "2");
-        mainTable_1.setDisable(true);
+        for (var table : tableList) {
+            for (var column : table.getColumns()) {
+                column.setSortable(false);
+                column.setReorderable(false);
+            }
+            SetNodeInTable(table, null);
+        }
+        SetNodeInTable(mainTable_1, initNode);
+
         runAuto.setOnAction(ActionEvent -> {
             runAuto.setDisable(true);
-            //mainTable_1.setDisable(true);
-            //runAuto.setStyle("-fx-background-color: #ff0000; ");
+            runStep.setDisable(true);
+            closeButton.setDisable(true);
             MyService service = new MyService();
             service.setOnSucceeded((EventHandler<WorkerStateEvent>) t -> {
-                //runAuto.setStyle("-fx-background-color: #FFA500; ");
-                //mainTable_1.setDisable(false);
-                runAuto.setDisable(false);
+                SetNodeInTable(mainTable_1, search.GetSolutionNode());
+                SetInfoToLabel(depthLabel, Integer.toString(search.GetSolutionNode().getDepth()));
+                SetInfoToLabel(costInfo, Integer.toString(search.GetStepCount()));
+                SetChilds(tableList, search, search.GetSolutionNode(), 1);
+                closeButton.setDisable(false);
             });
             service.start();
         });
 
         runStep.setOnAction(ActionEvent -> {
-
+            if (search.Next()) {
+                SetNodeInTable(mainTable_1, search.GetCurrentNode());
+                SetInfoToLabel(depthLabel, Integer.toString(search.GetCurrentNode().getDepth()));
+                SetInfoToLabel(costInfo, Integer.toString(search.GetStepCount()));
+                SetChilds(tableList, search, search.GetCurrentNode(), 1);
+            }
+            else {
+                SetNodeInTable(mainTable_1, search.GetSolutionNode());
+                SetInfoToLabel(depthLabel, Integer.toString(search.GetSolutionNode().getDepth()));
+                SetInfoToLabel(costInfo, Integer.toString(search.GetStepCount()));
+                SetChilds(tableList, search, search.GetSolutionNode(), 1);
+                runAuto.setDisable(true);
+                runStep.setDisable(true);
+            }
         });
 
         closeButton.setOnAction(ActionEvent -> {
@@ -139,57 +152,14 @@ public class DFSController {
     }
 
     private class MyService extends Service {
-        protected void SetTableData(TableView<TablesData> table, Node node) {
-            for (int i = 0; i < 3; ++i)
-                for (int j = 0; j < 3; ++j)
-                    table.getItems().get(i).setColumn(j, node.getState().get(i).get(j).toString());
-            table.refresh();
-        }
-
         @Override
         protected Task createTask() {
             return new Task() {
                 @Override
                 protected Object call() throws Exception {
-                    ArrayList<ArrayList<Integer>> initState = new ArrayList<>() {{
-                        add(new ArrayList<>(){{add(6); add(0); add(8);}});
-                        add(new ArrayList<>(){{add(5); add(2); add(1);}});
-                        add(new ArrayList<>(){{add(4); add(3); add(7);}});
-                    }};
-                    ArrayList<ArrayList<Integer>> goalState = new ArrayList<>() {{
-                        add(new ArrayList<>(){{add(1); add(2); add(3);}});
-                        add(new ArrayList<>(){{add(8); add(0); add(4);}});
-                        add(new ArrayList<>(){{add(7); add(6); add(5);}});
-                    }};
-                    Pair<Integer,Integer> initEmptyIndexes = new Pair<>(0,1);
-                    Pair<Integer,Integer> goalEmptyIndexes = new Pair<>(1,1);
-                    /*ArrayList<ArrayList<Integer>> initState = new ArrayList<>() {{
-                        add(new ArrayList<>(){{add(7); add(4); add(2);}});
-                        add(new ArrayList<>(){{add(3); add(5); add(8);}});
-                        add(new ArrayList<>(){{add(6); add(0); add(1);}});
-                    }};
-                    ArrayList<ArrayList<Integer>> goalState = new ArrayList<>() {{
-                        add(new ArrayList<>(){{add(1); add(2); add(3);}});
-                        add(new ArrayList<>(){{add(4); add(0); add(5);}});
-                        add(new ArrayList<>(){{add(6); add(7); add(8);}});
-                    }};
-                    Pair<Integer,Integer> initEmptyIndexes = new Pair<>(2,1);
-                    Pair<Integer,Integer> goalEmptyIndexes = new Pair<>(1,1);*/
-                    Node initNode = new Node(initState,initEmptyIndexes);
-                    Node goalNode = new Node(goalState,goalEmptyIndexes);
-                    Search search = new DeepFirstSearch(initNode,goalNode);
-                    while (search.Next()) {
-                        /*for (int i = 0; i < 3; ++i) {
-                            mainTable_1.getItems().get(i).
-                                    setFirstColumn(search.getCurrentNode().getState().get(i).get(0).toString());
-                            mainTable_1.getItems().get(i).
-                                    setSecondColumn(search.getCurrentNode().getState().get(i).get(1).toString());
-                            mainTable_1.getItems().get(i).
-                                    setThirdColumn(search.getCurrentNode().getState().get(i).get(2).toString());
-                        }
-                        mainTable_1.refresh();*/
+                    if (!search.IsOver()) {
+                        while (search.Next());
                     }
-                    SetTableData(mainTable_1, search.getCurrentNode());
                     return null;
                 }
             };

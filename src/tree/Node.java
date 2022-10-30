@@ -35,15 +35,13 @@ public class Node {
     public Node(ArrayList<ArrayList<Integer>> state,
                 Pair<Integer,Integer> emptyIndexes,
                 Node parent,
-                Action generatingAction,
-                int pathCost,
-                int depth)
+                Action generatingAction)
     {
         this(state, emptyIndexes);
         this.parent = parent;
         this.generatingAction = generatingAction;
-        this.pathCost = pathCost;
-        this.depth = depth;
+        pathCost = parent.pathCost + 1;
+        depth = parent.depth + 1;
     }
 
     public Node getNextValidChild() {
@@ -63,6 +61,16 @@ public class Node {
             if (child != null)
                 childs.add(child);
         } while (child != null);
+        return childs;
+    }
+
+    public ArrayList<Node> getChilds() {
+        ArrayList<Node> childs = new ArrayList<>();
+        for (var action : createActions) {
+            Node node = action.Apply(this);
+            if (node != null)
+                childs.add(node);
+        }
         return childs;
     }
 

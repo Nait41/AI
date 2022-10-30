@@ -21,7 +21,7 @@ public abstract class Action {
                     newState.get(rowIndex).add(elem);
             }
             Swap(newState, node.getEmptyIndexes(), newEmptyIndexes);
-            return new Node(newState, newEmptyIndexes, node, this, node.getPathCost() + 1, node.getDepth() + 1);
+            return new Node(newState, newEmptyIndexes, node, this);
         }
         return null;
     }
