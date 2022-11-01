@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<?import domain.NodeTableView?>
+<AnchorPane fx:id="mainPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="657.0" prefWidth="1018.0" style="-fx-background-color: #FFF8DC; -fx-background-radius: 20;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AStarController">
+    <children>
+        <AnchorPane prefHeight="69.0" prefWidth="1018.0" style="-fx-background-color: #FFA500; -fx-background-radius: 20;">
+            <children>
+                <Text fill="WHITE" layoutX="287.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Головоломка восьмерка" wrappingWidth="488.13671875">
+                    <font>
+                        <Font name="Impact" size="39.0" />
+                    </font>
+                </Text>
+            <Button fx:id="closeButton" layoutX="938.0" layoutY="17.0" minWidth="38.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="66.0" style="-fx-background-color: #FF6347;" text="Назад" textFill="WHITE">
+               <font>
+                  <Font name="Impact" size="14.0" />
+               </font>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </Button>
+            <AnchorPane layoutY="57.0" prefHeight="24.0" prefWidth="1018.0" style="-fx-background-color: #FFA500;" />
+            </children>
+        </AnchorPane>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <AnchorPane layoutY="81.0" prefHeight="81.0" prefWidth="1018.0" style="-fx-background-color: #F5DEB3;">
+         <children>
+            <Button fx:id="runStep" layoutX="431.0" layoutY="6.0" mnemonicParsing="false" style="-fx-background-color: #FFA500;" text="Выполнить шаг" textFill="WHITE">
+               <font>
+                  <Font name="Impact" size="16.0" />
+               </font>
+            </Button>
+            <Button fx:id="runAuto" layoutX="401.0" layoutY="44.0" mnemonicParsing="false" style="-fx-background-color: #FFA500;" text="Автоматический режим" textFill="WHITE">
+               <font>
+                  <Font name="Impact" size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+      <Line endX="-460.0" endY="-75.0" layoutX="460.0" layoutY="237.0" startX="557.9999389648438" startY="-75.0" stroke="ORANGE" />
+      <Label layoutX="411.0" layoutY="179.0" prefHeight="24.0" prefWidth="214.0" text="Текущее состояние:" textFill="ORANGE">
+         <font>
+            <Font name="Impact" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="depthLabel" layoutX="457.0" layoutY="430.0" text="Глубина: 0" textFill="ORANGE">
+         <font>
+            <Font name="Impact" size="20.0" />
+         </font>
+      </Label>
+      <NodeTableView fx:id="mainTable_1" layoutX="446.0" layoutY="218.0" prefHeight="100.0" prefWidth="100.0" />
+      <NodeTableView fx:id="mainTable_2" layoutX="288.0" layoutY="476.0" prefHeight="100.0" prefWidth="100.0" />
+      <NodeTableView fx:id="mainTable_3" layoutX="391.0" layoutY="476.0" prefHeight="100.0" prefWidth="100.0" />
+      <NodeTableView fx:id="mainTable_4" layoutX="494.0" layoutY="476.0" prefHeight="100.0" prefWidth="100.0" />
+      <NodeTableView fx:id="mainTable_5" layoutX="597.0" layoutY="476.0" prefHeight="100.0" prefWidth="100.0" />
+      <Label fx:id="costInfo" layoutX="424.0" layoutY="378.0" prefHeight="24.0" prefWidth="229.0" text="Стоимость пути: 0" textFill="ORANGE">
+         <font>
+            <Font name="Impact" size="20.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>
