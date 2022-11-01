@@ -14,7 +14,7 @@ public class Node {
     private Action generatingAction;
     private int pathCost = 0;
     private int depth = 0;
-    private int createIndex = 0;
+    //private int createIndex = 0;
     static private final ArrayList<Action> createActions;
 
     static {
@@ -44,10 +44,10 @@ public class Node {
         depth = parent.depth + 1;
     }
 
-    public Node getNextValidChild() {
+    /*public Node getNextValidChild() {
         Node child = null;
         while (child == null && createIndex < 4) {
-            child = createActions.get(createIndex).Apply(this);
+            child = createActions.get(createIndex).apply(this);
             ++createIndex;
         }
         return child;
@@ -62,12 +62,12 @@ public class Node {
                 childs.add(child);
         } while (child != null);
         return childs;
-    }
+    }*/
 
     public ArrayList<Node> getChilds() {
         ArrayList<Node> childs = new ArrayList<>();
         for (var action : createActions) {
-            Node node = action.Apply(this);
+            Node node = action.apply(this);
             if (node != null)
                 childs.add(node);
         }
@@ -114,13 +114,13 @@ public class Node {
         this.pathCost = pathCost;
     }
 
-    public int getCreateIndex() {
+    /*public int getCreateIndex() {
         return createIndex;
     }
 
     public void setCreateIndex(int createIndex) {
         this.createIndex = createIndex;
-    }
+    }*/
 
     public int getDepth() {
         return depth;
@@ -128,6 +128,33 @@ public class Node {
 
     public void setDepth(int depth) {
         this.depth = depth;
+    }
+
+    public Pair<Integer, Integer> getDigitPosition(int digit) {
+        if (digit == 0)
+            return getEmptyIndexes();
+        for (int i = 0; i < 3; ++i)
+            for (int j = 0; j < 3; ++j)
+                if (state.get(i).get(j).equals(digit))
+                    return new Pair<>(i,j);
+        return null;
+    }
+
+    public void swap(Pair<Integer, Integer> fstPos, Pair<Integer, Integer> secPos) {
+        if (isPosInRange(fstPos) && isPosInRange(secPos)) {
+            Integer fstVal = state.get(fstPos.getKey()).get(fstPos.getValue());
+            Integer secVal = state.get(secPos.getKey()).get(secPos.getValue());
+            state.get(fstPos.getKey()).set(fstPos.getValue(), secVal);
+            state.get(secPos.getKey()).set(secPos.getValue(), fstVal);
+            if (fstPos.equals(emptyIndexes))
+                emptyIndexes = secPos;
+            else if (secPos.equals(emptyIndexes))
+                emptyIndexes = fstPos;
+        }
+    }
+
+    private boolean isPosInRange(Pair<Integer, Integer> pos) {
+        return pos.getKey() >= 0 && pos.getKey() <= 8 && pos.getValue() >= 0 && pos.getValue() <= 8;
     }
 
     @Override

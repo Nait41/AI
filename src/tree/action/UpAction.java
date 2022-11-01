@@ -4,12 +4,12 @@ import tree.Node;
 
 public class UpAction extends Action{
     @Override
-    public Node Apply(Node node) {
-        return Apply(node, -1, 0);
+    public Node apply(Node node) {
+        return apply(node, -1, 0);
     }
 
     @Override
-    boolean IsPossible(Node node) {
+    boolean isPossible(Node node) {
         return node.getEmptyIndexes().getKey() != 0;
     }
 }

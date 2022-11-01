@@ -12,47 +12,53 @@ public abstract class BidirectionalSearch extends Search {
         super(initNode, goalNode);
     }
 
-    public boolean Next() {
+    public boolean next() {
         if (!isOver) {
-            directSearch.Next();
-            reverseSearch.Next();
-            CheckForSolution();
+            directSearch.next();
+            reverseSearch.next();
+            checkForSolution();
         }
         return !isOver;
     }
 
-    public UnidirectionalSearch GetDirectSearch() {
+    public UnidirectionalSearch getDirectSearch() {
         return directSearch;
     }
 
-    public UnidirectionalSearch GetReverseSearch() {
+    public UnidirectionalSearch getReverseSearch() {
         return reverseSearch;
     }
 
-    public Node GetDirectSolutionNode() {
+    public Node getDirectSolutionNode() {
         return directSolutionNode;
     }
 
-    public Node GetReverseSolutionNode() {
+    public Node getReverseSolutionNode() {
         return reverseSolutionNode;
     }
 
-    public int GetNodesCount() {
-        return directSearch.GetNodesCount() + reverseSearch.GetNodesCount();
+    public int getNodesCount() {
+        return directSearch.getNodesCount() + reverseSearch.getNodesCount();
     }
 
-    public int GetStepCount() {
-        return directSearch.GetStepCount() + reverseSearch.GetStepCount();
+    public int getStepCount() {
+        return directSearch.getStepCount() + reverseSearch.getStepCount();
     }
 
-    private void CheckForSolution() {
-        if (directSearch.IsWaiting(reverseSearch.GetCurrentNode()) || directSearch.Visited(reverseSearch.GetCurrentNode())) {
-            directSolutionNode = directSearch.GetNodeWithSameState(reverseSearch.GetCurrentNode());
-            reverseSolutionNode = reverseSearch.GetCurrentNode();
+    private void checkForSolution() {
+        if (directSearch.isWaiting(reverseSearch.getCurrentNode()) || directSearch.visited(reverseSearch.getCurrentNode())) {
+            directSolutionNode = directSearch.getNodeWithSameState(reverseSearch.getCurrentNode());
+            reverseSolutionNode = reverseSearch.getCurrentNode();
             isOver = true;
-        } else if (reverseSearch.IsWaiting(directSearch.GetCurrentNode()) || reverseSearch.Visited(directSearch.GetCurrentNode())) {
-            directSolutionNode = directSearch.GetCurrentNode();
-            reverseSolutionNode = reverseSearch.GetNodeWithSameState(directSearch.GetCurrentNode());
+        } else if (reverseSearch.isWaiting(directSearch.getCurrentNode()) || reverseSearch.visited(directSearch.getCurrentNode())) {
+            directSolutionNode = directSearch.getCurrentNode();
+            reverseSolutionNode = reverseSearch.getNodeWithSameState(directSearch.getCurrentNode());
+            isOver = true;
+        } else if (directSearch.isOver()) {
+            directSolutionNode = directSearch.getSolutionNode();
+            isOver = true;
+        } else if (reverseSearch.isOver()) {
+            reverseSolutionNode = reverseSearch.getSolutionNode();
             isOver = true;
         }
     }

@@ -2,8 +2,6 @@ package tree.search;
 
 import tree.Node;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public abstract class Search {
     protected Node initNode;
     protected Node goalNode;
@@ -15,11 +13,11 @@ public abstract class Search {
         isOver = initNode.equals(goalNode);
     }
 
-    public boolean IsOver() {
+    public boolean isOver() {
         return isOver;
     }
 
-    public abstract boolean Next();
-    public abstract int GetStepCount();
-    public abstract int GetNodesCount();
+    public abstract boolean next();
+    public abstract int getStepCount();
+    public abstract int getNodesCount();
 }

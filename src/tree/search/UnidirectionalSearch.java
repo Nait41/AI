@@ -20,7 +20,7 @@ public abstract class UnidirectionalSearch extends Search {
         waitingNodes.put(initNode,initNode);
     }
 
-    public Node GetNodeWithSameState(Node node) {
+    public Node getNodeWithSameState(Node node) {
         if (waitingNodes.containsKey(node))
             return waitingNodes.get(node);
         else if (visitedNodes.containsKey(node))
@@ -28,27 +28,27 @@ public abstract class UnidirectionalSearch extends Search {
         return null;
     }
 
-    public Node GetSolutionNode() {
+    public Node getSolutionNode() {
         return solutionNode;
     }
 
-    public int GetNodesCount() {
+    public int getNodesCount() {
         return waitingNodes.size() + visitedNodes.size();
     }
 
-    public int GetStepCount() {
+    public int getStepCount() {
         return stepCount;
     }
 
-    public boolean IsWaiting(Node node) {
+    public boolean isWaiting(Node node) {
         return waitingNodes.containsKey(node);
     }
 
-    public boolean Visited(Node node) {
+    public boolean visited(Node node) {
         return visitedNodes.containsKey(node);
     }
 
-    public Node GetCurrentNode() {
+    public Node getCurrentNode() {
         return currentNode;
     }
 }

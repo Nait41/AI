@@ -28,15 +28,4 @@ public class TablesData {
     public void setThirdColumn(String thirdColumn) {
         this.thirdColumn = thirdColumn;
     }
-
-    public void setColumn(int columnIndex, String columnData) throws IllegalArgumentException {
-        if (columnIndex == 0)
-            setFirstColumn(columnData);
-        else if (columnIndex == 1)
-            setSecondColumn(columnData);
-        else if (columnIndex == 2)
-            setThirdColumn(columnData);
-        else
-            throw new IllegalArgumentException();
-    }
 }

@@ -7,11 +7,11 @@ import java.util.ArrayList;
 
 public abstract class Action {
 
-    public abstract Node Apply(Node node);
-    abstract boolean IsPossible(Node node);
+    public abstract Node apply(Node node);
+    abstract boolean isPossible(Node node);
 
-    Node Apply(Node node, int rowOffset, int columnOffset) {
-        if (IsPossible(node)) {
+    protected Node apply(Node node, int rowOffset, int columnOffset) {
+        if (isPossible(node)) {
             Pair<Integer, Integer> newEmptyIndexes = new Pair<>(node.getEmptyIndexes().getKey() + rowOffset,
                     node.getEmptyIndexes().getValue() + columnOffset);
             ArrayList<ArrayList<Integer>> newState = new ArrayList<>(node.getState().size());
