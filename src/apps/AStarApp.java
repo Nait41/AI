@@ -16,8 +16,8 @@ import java.io.IOException;
 public class AStarApp extends javafx.application.Application {
     private double xOffset;
     private double yOffset;
-    private Node initNode;
-    private Node goalNode;
+    private final Node initNode;
+    private final Node goalNode;
 
     public AStarApp(Node initNode, Node goalNode) {
         this.initNode = initNode;
@@ -30,7 +30,6 @@ public class AStarApp extends javafx.application.Application {
         Parent root = fxmlLoader.load();
         fxmlLoader.<AStarController>getController().preset(initNode, goalNode);
         Scene scene = new Scene(root);
-        stage.setTitle("GenTest");
         scene.setFill(Color.TRANSPARENT);
         stage.initStyle(StageStyle.TRANSPARENT);
         scene.setOnMousePressed(new EventHandler<MouseEvent>() {

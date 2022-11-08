@@ -9,7 +9,7 @@ public class LeftAction extends Action {
     }
 
     @Override
-    boolean isPossible(Node node) {
+    public boolean isPossible(Node node) {
         return node.getEmptyIndexes().getValue() != 0;
     }
 }

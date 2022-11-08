@@ -30,7 +30,6 @@ public class DFSApp extends javafx.application.Application {
         Parent root = fxmlLoader.load();
         fxmlLoader.<DFSController>getController().preset(initNode, goalNode);
         Scene scene = new Scene(root);
-        stage.setTitle("GenTest");
         scene.setFill(Color.TRANSPARENT);
         stage.initStyle(StageStyle.TRANSPARENT);
         scene.setOnMousePressed(new EventHandler<MouseEvent>() {

@@ -20,7 +20,8 @@ public class BreadthFirstSearch extends UnidirectionalSearch {
             stepCount++;
             currentNode = searchQueue.poll();
             waitingNodes.remove(currentNode);
-            visitedNodes.put(currentNode,currentNode);
+            //visitedNodes.put(currentNode,currentNode);
+            visitedNodes.add(currentNode);
             //ArrayList<Node> childNodes = currentNode.getRemainingValidChilds();
             ArrayList<Node> childNodes = currentNode.getChilds();
             for (var childNode : childNodes) {
@@ -29,7 +30,8 @@ public class BreadthFirstSearch extends UnidirectionalSearch {
                     isOver = true;
                     break;
                 } else if (!isWaiting(childNode) && !visited(childNode)) {
-                    waitingNodes.put(childNode,childNode);
+                    //waitingNodes.put(childNode,childNode);
+                    waitingNodes.add(childNode);
                     searchQueue.offer(childNode);
                 }
             }

@@ -19,7 +19,8 @@ public class DeepFirstSearch extends UnidirectionalSearch {
             stepCount++;
             currentNode = searchStack.pop();
             waitingNodes.remove(currentNode);
-            visitedNodes.put(currentNode,currentNode);
+            //visitedNodes.put(currentNode,currentNode);
+            visitedNodes.add(currentNode);
             //ArrayList<Node> childNodes = currentNode.getRemainingValidChilds();
             ArrayList<Node> childNodes = currentNode.getChilds();
             for (var childNode : childNodes) {
@@ -28,7 +29,8 @@ public class DeepFirstSearch extends UnidirectionalSearch {
                     isOver = true;
                     break;
                 } else if (!isWaiting(childNode) && !visited(childNode)) {
-                    waitingNodes.put(childNode,childNode);
+                    //waitingNodes.put(childNode,childNode);
+                    waitingNodes.add(childNode);
                     searchStack.push(childNode);
                 }
             }

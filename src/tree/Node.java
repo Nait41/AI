@@ -15,15 +15,12 @@ public class Node {
     private int pathCost = 0;
     private int depth = 0;
     //private int createIndex = 0;
-    static private final ArrayList<Action> createActions;
-
-    static {
-        createActions = new ArrayList<>();
-        createActions.add(new LeftAction());
-        createActions.add(new RightAction());
-        createActions.add(new UpAction());
-        createActions.add(new DownAction());
-    }
+    static private final ArrayList<Action> createActions = new ArrayList<>(){{
+        add(new LeftAction());
+        add(new RightAction());
+        add(new UpAction());
+        add(new DownAction());
+    }};
 
     public Node(ArrayList<ArrayList<Integer>> state,
                 Pair<Integer,Integer> emptyIndexes)

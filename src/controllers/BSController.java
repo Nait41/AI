@@ -19,15 +19,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class BSController extends SearchController {
-
-    @FXML
-    public Label costInfo;
-
     @FXML
     public Label directDepthLabel;
 
     @FXML
     public Label reverseDepthLabel;
+
+    @FXML
+    public Label directCostInfo;
+
+    @FXML
+    public Label reserveCostInfo;
+
+    @FXML
+    public Label stepInfo;
 
     @FXML
     private Button closeButton;
@@ -144,14 +149,22 @@ public class BSController extends SearchController {
         if (directNode != null) {
             mainTable_1.setNode(directNode);
             setInfoToLabel(directDepthLabel, Integer.toString(directNode.getDepth()));
+            setInfoToLabel(directCostInfo, Integer.toString(reverseNode.getPathCost()));
             setChilds(tableList.subList(1,5), search.getDirectSearch(), directNode);
+        } else {
+            setInfoToLabel(directDepthLabel, "-");
+            setInfoToLabel(directCostInfo, "-");
         }
         if (reverseNode != null) {
             mainTable_6.setNode(reverseNode);
             setInfoToLabel(reverseDepthLabel, Integer.toString(reverseNode.getDepth()));
+            setInfoToLabel(reserveCostInfo, Integer.toString(reverseNode.getPathCost()));
             setChilds(tableList.subList(6,10), search.getReverseSearch(), reverseNode);
+        } else {
+            setInfoToLabel(reverseDepthLabel, "-");
+            setInfoToLabel(reserveCostInfo, "-");
         }
-        setInfoToLabel(costInfo, Integer.toString(search.getStepCount()));
+        setInfoToLabel(stepInfo, Integer.toString(search.getStepCount()));
     }
 
     @Override

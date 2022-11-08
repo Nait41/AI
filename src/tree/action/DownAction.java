@@ -9,7 +9,7 @@ public class DownAction extends Action {
     }
 
     @Override
-    boolean isPossible(Node node) {
+    public boolean isPossible(Node node) {
         return node.getEmptyIndexes().getKey() != 2;
     }
 }

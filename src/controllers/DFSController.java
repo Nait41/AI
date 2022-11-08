@@ -27,6 +27,9 @@ public class DFSController extends SearchController {
     private Label costInfo;
 
     @FXML
+    private Label stepInfo;
+
+    @FXML
     private Button closeButton;
 
     @FXML
@@ -120,9 +123,13 @@ public class DFSController extends SearchController {
         if (node != null) {
             mainTable_1.setNode(node);
             setInfoToLabel(depthLabel, Integer.toString(node.getDepth()));
+            setInfoToLabel(costInfo, Integer.toString(node.getPathCost()));
             setChilds(tableList.subList(1,5), search, node);
+        } else {
+            setInfoToLabel(depthLabel, "-");
+            setInfoToLabel(costInfo, "-");
         }
-        setInfoToLabel(costInfo, Integer.toString(search.getStepCount()));
+        setInfoToLabel(stepInfo, Integer.toString(search.getStepCount()));
     }
 
     @Override

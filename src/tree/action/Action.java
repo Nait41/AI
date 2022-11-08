@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public abstract class Action {
 
     public abstract Node apply(Node node);
-    abstract boolean isPossible(Node node);
+    public abstract boolean isPossible(Node node);
 
     protected Node apply(Node node, int rowOffset, int columnOffset) {
         if (isPossible(node)) {
