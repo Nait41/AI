@@ -16,8 +16,10 @@ import java.io.IOException;
 public class DFSApp extends javafx.application.Application {
     private double xOffset;
     private double yOffset;
-    private Node initNode;
-    private Node goalNode;
+    //private Node initNode;
+    //private Node goalNode;
+    public static Node initNode;
+    public static Node goalNode;
 
     public DFSApp(Node initNode, Node goalNode) {
         this.initNode = initNode;
@@ -28,7 +30,7 @@ public class DFSApp extends javafx.application.Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(DFSApp.class.getResource("../panes/deepFirstSearch.fxml"));
         Parent root = fxmlLoader.load();
-        fxmlLoader.<DFSController>getController().preset(initNode, goalNode);
+        //fxmlLoader.<DFSController>getController().preset(initNode, goalNode);
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.initStyle(StageStyle.TRANSPARENT);

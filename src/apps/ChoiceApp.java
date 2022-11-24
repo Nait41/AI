@@ -18,8 +18,10 @@ import java.util.ArrayList;
 public class ChoiceApp extends javafx.application.Application {
     private double xOffset;
     private double yOffset;
-    private final Node initNode;
-    private final Node goalNode;
+    //private final Node initNode;
+    //private final Node goalNode;
+    public static Node initNode;
+    public static Node goalNode;
 
     public ChoiceApp() {
         ArrayList<ArrayList<Integer>> initState = new ArrayList<>() {{
@@ -45,7 +47,7 @@ public class ChoiceApp extends javafx.application.Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ChoiceApp.class.getResource("../panes/choice.fxml"));
         Parent root = fxmlLoader.load();
-        fxmlLoader.<ChoiceController>getController().preset(initNode, goalNode);
+        //fxmlLoader.<ChoiceController>getController().preset(initNode, goalNode);
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.initStyle(StageStyle.TRANSPARENT);

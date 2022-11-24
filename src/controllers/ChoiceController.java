@@ -2,6 +2,7 @@ package controllers;
 
 import apps.AStarApp;
 import apps.BSApp;
+import apps.ChoiceApp;
 import apps.DFSApp;
 import domain.NodeTableView;
 import javafx.fxml.FXML;
@@ -40,9 +41,9 @@ public class ChoiceController extends BasicController {
     @FXML
     void initialize() throws FileNotFoundException, InterruptedException {
         tableInit();
-
         dfsButton.setOnAction(ActionEvent -> {
-            DFSApp dfsApp = new DFSApp(initNode, goalNode);
+            //DFSApp dfsApp = new DFSApp(initNode, goalNode);
+            DFSApp dfsApp = new DFSApp(ChoiceApp.initNode, ChoiceApp.goalNode);
             try {
                 dfsApp.start(new Stage());
             } catch (IOException e) {
@@ -53,7 +54,8 @@ public class ChoiceController extends BasicController {
         });
 
         bsButton.setOnAction(ActionEvent -> {
-            BSApp bsApp = new BSApp(initNode, goalNode);
+            //BSApp bsApp = new BSApp(initNode, goalNode);
+            BSApp bsApp = new BSApp(ChoiceApp.initNode, ChoiceApp.goalNode);
             try {
                 bsApp.start(new Stage());
             } catch (IOException e) {
@@ -64,7 +66,8 @@ public class ChoiceController extends BasicController {
         });
 
         aStarButton.setOnAction(ActionEvent -> {
-            AStarApp aStarApp = new AStarApp(initNode, goalNode);
+            //AStarApp aStarApp = new AStarApp(initNode, goalNode);
+            AStarApp aStarApp = new AStarApp(ChoiceApp.initNode, ChoiceApp.goalNode);
             try {
                 aStarApp.start(new Stage());
             } catch (IOException e) {
@@ -80,14 +83,16 @@ public class ChoiceController extends BasicController {
         });
     }
 
-    public void preset(Node initNode, Node goalNode) {
+    /*public void preset(Node initNode, Node goalNode) {
         this.initNode = initNode;
         this.goalNode = goalNode;
         initStateTable.setNode(initNode);
         goalStateTable.setNode(goalNode);
-    }
+    }*/
 
     protected void tableInit() {
+        initStateTable.setNode(ChoiceApp.initNode);
+        goalStateTable.setNode(ChoiceApp.goalNode);
         initStateTable.setEditable(true);
         goalStateTable.setEditable(true);
     }

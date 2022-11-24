@@ -16,8 +16,10 @@ import java.io.IOException;
 public class BSApp extends javafx.application.Application {
     private double xOffset;
     private double yOffset;
-    private final Node initNode;
-    private final Node goalNode;
+    //private final Node initNode;
+    //private final Node goalNode;
+    public static Node initNode;
+    public static Node goalNode;
 
     public BSApp(Node initNode, Node goalNode) {
         this.initNode = initNode;
@@ -28,7 +30,7 @@ public class BSApp extends javafx.application.Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(BSApp.class.getResource("../panes/bideractionalSearch.fxml"));
         Parent root = fxmlLoader.load();
-        fxmlLoader.<BSController>getController().preset(initNode, goalNode);
+        //fxmlLoader.<BSController>getController().preset(initNode, goalNode);
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.initStyle(StageStyle.TRANSPARENT);

@@ -1,5 +1,6 @@
 package controllers;
 
+import apps.BSApp;
 import apps.ChoiceApp;
 import domain.NodeTableView;
 import javafx.concurrent.Service;
@@ -78,8 +79,8 @@ public class BSController extends SearchController {
     @FXML
     private Button runStep;
 
-    private Node initNode;
-    private Node goalNode;
+    //private Node initNode;
+    //private Node goalNode;
     private BidirectionalSearch search;
 
     public void tableInit() {
@@ -100,6 +101,9 @@ public class BSController extends SearchController {
 
     @FXML
     void initialize() throws FileNotFoundException, InterruptedException {
+        search = new BidirectionalBreadthFirstSearch(BSApp.initNode, BSApp.goalNode);
+        mainTable_1.setNode(BSApp.initNode);
+        mainTable_6.setNode(BSApp.goalNode);
         tableInit();
         runAuto.setOnAction(ActionEvent -> {
             runAuto.setDisable(true);
@@ -126,7 +130,8 @@ public class BSController extends SearchController {
         });
 
         closeButton.setOnAction(ActionEvent -> {
-            ChoiceApp choiceApp = new ChoiceApp(initNode, goalNode);
+            ChoiceApp choiceApp = new ChoiceApp(BSApp.initNode, BSApp.goalNode);
+            //ChoiceApp choiceApp = new ChoiceApp(initNode, goalNode);
             try {
                 choiceApp.start(new Stage());
             } catch (IOException e) {
@@ -137,13 +142,13 @@ public class BSController extends SearchController {
         });
     }
 
-    public void preset(Node initNode, Node goalNode) {
+    /*public void preset(Node initNode, Node goalNode) {
         this.initNode = initNode;
         this.goalNode = goalNode;
         search = new BidirectionalBreadthFirstSearch(initNode, goalNode);
         mainTable_1.setNode(initNode);
         mainTable_6.setNode(goalNode);
-    }
+    }*/
 
     private void NewValueSetting(Node directNode, Node reverseNode) {
         if (directNode != null) {

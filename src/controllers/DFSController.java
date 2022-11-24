@@ -1,6 +1,7 @@
 package controllers;
 
 import apps.ChoiceApp;
+import apps.DFSApp;
 import domain.NodeTableView;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -58,16 +59,16 @@ public class DFSController extends SearchController {
     @FXML
     private Button runStep;
 
-    private Node initNode;
-    private Node goalNode;
+    //private Node initNode;
+    //private Node goalNode;
     private UnidirectionalSearch search;
 
-    public void preset(Node initNode, Node goalNode) {
+    /*public void preset(Node initNode, Node goalNode) {
         this.initNode = initNode;
         this.goalNode = goalNode;
         search = new DeepFirstSearch(initNode, goalNode);
         mainTable_1.setNode(initNode);
-    }
+    }*/
 
     public void tableInit() {
         tableList.add(mainTable_1);
@@ -82,6 +83,8 @@ public class DFSController extends SearchController {
 
     @FXML
     void initialize() throws FileNotFoundException, InterruptedException {
+        search = new DeepFirstSearch(DFSApp.initNode, DFSApp.goalNode);
+        mainTable_1.setNode(DFSApp.initNode);
         tableInit();
         runAuto.setOnAction(ActionEvent -> {
             runAuto.setDisable(true);
@@ -108,7 +111,8 @@ public class DFSController extends SearchController {
         });
 
         closeButton.setOnAction(ActionEvent -> {
-            ChoiceApp choiceApp = new ChoiceApp(initNode, goalNode);
+            //ChoiceApp choiceApp = new ChoiceApp(initNode, goalNode);
+            ChoiceApp choiceApp = new ChoiceApp(DFSApp.initNode, DFSApp.goalNode);
             try {
                 choiceApp.start(new Stage());
             } catch (IOException e) {
