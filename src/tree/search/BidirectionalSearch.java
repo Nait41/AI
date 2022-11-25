@@ -46,11 +46,11 @@ public abstract class BidirectionalSearch extends Search {
     }
 
     private void checkForSolution() {
-        if (directSearch.isWaiting(reverseSearch.getCurrentNode()) || directSearch.visited(reverseSearch.getCurrentNode())) {
+        if (directSearch.isRepetition(reverseSearch.getCurrentNode())) {
             directSolutionNode = directSearch.getNodeWithSameState(reverseSearch.getCurrentNode());
             reverseSolutionNode = reverseSearch.getCurrentNode();
             isOver = true;
-        } else if (reverseSearch.isWaiting(directSearch.getCurrentNode()) || reverseSearch.visited(directSearch.getCurrentNode())) {
+        } else if (reverseSearch.isRepetition(directSearch.getCurrentNode())) {
             directSolutionNode = directSearch.getCurrentNode();
             reverseSolutionNode = reverseSearch.getNodeWithSameState(directSearch.getCurrentNode());
             isOver = true;
