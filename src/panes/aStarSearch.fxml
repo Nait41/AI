@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="mainPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="657.0" prefWidth="1018.0" style="-fx-background-color: #FFF8DC; -fx-background-radius: 20;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BSController">
+<AnchorPane fx:id="mainPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="657.0" prefWidth="1018.0" style="-fx-background-color: #FFF8DC; -fx-background-radius: 20;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AStarController">
     <children>
         <AnchorPane prefHeight="69.0" prefWidth="1018.0" style="-fx-background-color: #FFA500; -fx-background-radius: 20;">
             <children>
@@ -45,47 +45,27 @@
          </children>
       </AnchorPane>
       <Line endX="-460.0" endY="-75.0" layoutX="460.0" layoutY="237.0" startX="557.9999389648438" startY="-75.0" stroke="ORANGE" />
-      <Label layoutX="190.0" layoutY="180.0" text="Прямой поиск" textFill="ORANGE">
+      <Label layoutX="411.0" layoutY="179.0" prefHeight="24.0" prefWidth="214.0" text="Текущее состояние:" textFill="ORANGE">
          <font>
             <Font name="Impact" size="20.0" />
          </font>
       </Label>
-      <Label fx:id="directDepthLabel" layoutX="176.0" layoutY="430.0" prefHeight="24.0" prefWidth="151.0" text="Глубина:  0" textFill="ORANGE">
+      <Label fx:id="depthLabel" layoutX="457.0" layoutY="430.0" text="Глубина: 0" textFill="ORANGE">
          <font>
             <Font name="Impact" size="20.0" />
          </font>
       </Label>
-      <NodeTableView fx:id="mainTable_1" layoutX="202.0" layoutY="219.0" prefHeight="100.0" prefWidth="100.0" />
-      <NodeTableView fx:id="mainTable_2" layoutX="44.0" layoutY="477.0" prefHeight="100.0" prefWidth="100.0" />
-      <NodeTableView fx:id="mainTable_3" layoutX="147.0" layoutY="477.0" prefHeight="100.0" prefWidth="100.0" />
-      <NodeTableView fx:id="mainTable_4" layoutX="250.0" layoutY="477.0" prefHeight="100.0" prefWidth="100.0" />
-      <NodeTableView fx:id="mainTable_5" layoutX="353.0" layoutY="477.0" prefHeight="100.0" prefWidth="100.0" />
-      <Label layoutX="678.0" layoutY="180.0" text="Обратный поиск" textFill="ORANGE">
+      <NodeTableView fx:id="mainTable_1" layoutX="446.0" layoutY="218.0" prefHeight="100.0" prefWidth="100.0" />
+      <NodeTableView fx:id="mainTable_2" layoutX="288.0" layoutY="476.0" prefHeight="100.0" prefWidth="100.0" />
+      <NodeTableView fx:id="mainTable_3" layoutX="391.0" layoutY="476.0" prefHeight="100.0" prefWidth="100.0" />
+      <NodeTableView fx:id="mainTable_4" layoutX="494.0" layoutY="476.0" prefHeight="100.0" prefWidth="100.0" />
+      <NodeTableView fx:id="mainTable_5" layoutX="597.0" layoutY="476.0" prefHeight="100.0" prefWidth="100.0" />
+      <Label fx:id="costInfo" layoutX="417.0" layoutY="383.0" prefHeight="24.0" prefWidth="158.0" text="Стоимость пути: 0" textFill="ORANGE">
          <font>
             <Font name="Impact" size="20.0" />
          </font>
       </Label>
-      <Label fx:id="reverseDepthLabel" layoutX="670.0" layoutY="430.0" prefHeight="24.0" prefWidth="151.0" text="Глубина: 0 " textFill="ORANGE">
-         <font>
-            <Font name="Impact" size="20.0" />
-         </font>
-      </Label>
-      <NodeTableView fx:id="mainTable_6" layoutX="700.0" layoutY="219.0" prefHeight="100.0" prefWidth="100.0" />
-      <NodeTableView fx:id="mainTable_7" layoutX="543.0" layoutY="477.0" prefHeight="100.0" prefWidth="100.0" />
-      <NodeTableView fx:id="mainTable_8" layoutX="646.0" layoutY="477.0" prefHeight="100.0" prefWidth="100.0" />
-      <NodeTableView fx:id="mainTable_9" layoutX="749.0" layoutY="477.0" prefHeight="100.0" prefWidth="100.0" />
-      <NodeTableView fx:id="mainTable_10" layoutX="852.0" layoutY="477.0" prefHeight="100.0" prefWidth="100.0" />
-      <Label fx:id="directCostInfo" layoutX="142.0" layoutY="383.0" prefHeight="24.0" prefWidth="218.0" text="Стоимость пути:  0" textFill="ORANGE">
-         <font>
-            <Font name="Impact" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="reserveCostInfo" layoutX="641.0" layoutY="383.0" prefHeight="24.0" prefWidth="217.0" text="Стоимость пути:  0" textFill="ORANGE">
-         <font>
-            <Font name="Impact" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="stepInfo" layoutX="389.0" layoutY="337.0" prefHeight="24.0" prefWidth="239.0" text="Количество шагов:  0" textFill="ORANGE">
+      <Label fx:id="costInfo1" layoutX="405.0" layoutY="336.0" prefHeight="24.0" prefWidth="181.0" text="Количество шагов: 0" textFill="ORANGE">
          <font>
             <Font name="Impact" size="20.0" />
          </font>
