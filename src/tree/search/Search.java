@@ -17,6 +17,10 @@ public abstract class Search {
         return isOver;
     }
 
+    protected boolean isGoal(Node node) {
+        return goalNode.equals(node);
+    }
+
     public abstract boolean next();
     public abstract int getStepCount();
     public abstract int getNodesCount();

@@ -56,6 +56,10 @@ public abstract class UnidirectionalSearch extends Search {
         return waitingNodes.contains(node);
     }
 
+    protected boolean isRepetition(Node node) {
+        return isWaiting(node) || visited(node);
+    }
+
     public boolean visited(Node node) {
         //return visitedNodes.containsKey(node);
         return visitedNodes.contains(node);

@@ -25,11 +25,11 @@ public class BreadthFirstSearch extends UnidirectionalSearch {
             //ArrayList<Node> childNodes = currentNode.getRemainingValidChilds();
             ArrayList<Node> childNodes = currentNode.getChilds();
             for (var childNode : childNodes) {
-                if (childNode.equals(goalNode)) {
+                if (isGoal(childNode)) {
                     solutionNode = childNode;
                     isOver = true;
                     break;
-                } else if (!isWaiting(childNode) && !visited(childNode)) {
+                } else if (!isRepetition(childNode)) {
                     //waitingNodes.put(childNode,childNode);
                     waitingNodes.add(childNode);
                     searchQueue.offer(childNode);
