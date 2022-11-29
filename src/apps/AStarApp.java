@@ -10,25 +10,28 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tree.Node;
+import tree.search.heuristics.HeuristicI;
 
 import java.io.IOException;
 
 public class AStarApp extends javafx.application.Application {
     private double xOffset;
     private double yOffset;
-    private final Node initNode;
-    private final Node goalNode;
+    public static Node initNode;
+    public static Node goalNode;
+    public static HeuristicI Heuristic;
 
-    public AStarApp(Node initNode, Node goalNode) {
+    public AStarApp(Node initNode, Node goalNode, HeuristicI Heuristic) {
         this.initNode = initNode;
         this.goalNode = goalNode;
+        this.Heuristic = Heuristic;
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(DFSApp.class.getResource("../panes/aStarSearch.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(AStarApp.class.getResource("../panes/aStarSearch.fxml"));
         Parent root = fxmlLoader.load();
-        fxmlLoader.<AStarController>getController().preset(initNode, goalNode);
+        //fxmlLoader.<AStarController>getController().preset(initNode, goalNode, Heuristic);
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.initStyle(StageStyle.TRANSPARENT);
