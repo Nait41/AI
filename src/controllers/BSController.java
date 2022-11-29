@@ -6,21 +6,18 @@ import domain.NodeTableView;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import tree.Node;
-import tree.search.BidirectionalBreadthFirstSearch;
-import tree.search.BidirectionalSearch;
-import tree.search.BreadthFirstSearch;
-import tree.search.UnidirectionalSearch;
+import tree.search.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class BSController extends SearchController {
     @FXML
@@ -37,6 +34,27 @@ public class BSController extends SearchController {
 
     @FXML
     public Label stepInfo;
+
+    @FXML
+    public Label nodesCountLabel;
+
+    @FXML
+    public NodeTableView directBorderTable;
+
+    @FXML
+    public NodeTableView reverseBorderTable;
+
+    @FXML
+    public Button directBroadPrevButton;
+
+    @FXML
+    public Button directBroadNextButton;
+
+    @FXML
+    public Button reverseBroadPrevButton;
+
+    @FXML
+    public Button reverseBroadNextButton;
 
     @FXML
     private Button closeButton;
@@ -85,6 +103,10 @@ public class BSController extends SearchController {
     private BidirectionalSearch search;
     private UpdatedData directData;
     private UpdatedData reverseData;
+    private ListIterator<Node> directBorderIt;
+    private ListIterator<Node> reverseBorderIt;
+    private BoolRef wasDirectBorderNext;
+    private BoolRef wasReverseBorderNext;
 
     public void tableInit() {
         tableList.add(mainTable_1);
@@ -107,6 +129,12 @@ public class BSController extends SearchController {
         search = new BidirectionalBreadthFirstSearch(BSApp.initNode, BSApp.goalNode);
         mainTable_1.setNode(BSApp.initNode);
         mainTable_6.setNode(BSApp.goalNode);
+        directBorderIt = ((LinkedList<Node>)search.getDirectSearch().getBorder()).listIterator();
+        directBorderTable.setNode(directBorderIt.next());
+        wasDirectBorderNext = new BoolRef(true);
+        reverseBorderIt = ((LinkedList<Node>)search.getReverseSearch().getBorder()).listIterator();
+        reverseBorderTable.setNode(reverseBorderIt.next());
+        wasReverseBorderNext = new BoolRef(true);;
         tableInit();
         directData = new UpdatedData(directCostInfo, directDepthLabel, mainTable_1, tableList.subList(1,5));
         reverseData = new UpdatedData(reverseCostInfo, reverseDepthLabel, mainTable_6, tableList.subList(6,10));
@@ -118,6 +146,8 @@ public class BSController extends SearchController {
             service.setOnSucceeded((EventHandler<WorkerStateEvent>) t -> {
                 NewValueSetting( search.getDirectSolutionNode(), search.getReverseSolutionNode());
                 showAlert();
+                BanBorderOperation(directBorderTable, directBroadNextButton, directBroadPrevButton);
+                BanBorderOperation(reverseBorderTable, reverseBroadNextButton, reverseBroadPrevButton);
                 closeButton.setDisable(false);
             });
             service.start();
@@ -125,6 +155,9 @@ public class BSController extends SearchController {
 
         runStep.setOnAction(ActionEvent -> {
             if (search.next()) {
+                UpdateBorderIt();
+                nextBorder(directBorderIt, directBorderTable, wasDirectBorderNext);
+                nextBorder(reverseBorderIt, reverseBorderTable, wasReverseBorderNext);
                 NewValueSetting(search.getDirectSearch().getCurrentNode(), search.getReverseSearch().getCurrentNode());
             }
             else {
@@ -132,6 +165,34 @@ public class BSController extends SearchController {
                 runAuto.setDisable(true);
                 runStep.setDisable(true);
             }
+        });
+
+        directBroadNextButton.setOnAction(ActionEvent -> {
+            if (!wasDirectBorderNext.value) {
+                nextBorder(directBorderIt, directBorderTable, wasDirectBorderNext);
+            }
+            nextBorder(directBorderIt, directBorderTable, wasDirectBorderNext);
+        });
+
+        reverseBroadNextButton.setOnAction(ActionEvent -> {
+            if (!wasReverseBorderNext.value) {
+                nextBorder(reverseBorderIt, reverseBorderTable, wasReverseBorderNext);
+            }
+            nextBorder(reverseBorderIt, reverseBorderTable, wasReverseBorderNext);
+        });
+
+        directBroadPrevButton.setOnAction(ActionEvent -> {
+            if (wasDirectBorderNext.value) {
+                prevBorder(directBorderIt, directBorderTable, wasDirectBorderNext);
+            }
+            prevBorder(directBorderIt, directBorderTable, wasDirectBorderNext);
+        });
+
+        reverseBroadPrevButton.setOnAction(ActionEvent -> {
+            if (wasReverseBorderNext.value) {
+                prevBorder(reverseBorderIt, reverseBorderTable, wasReverseBorderNext);
+            }
+            prevBorder(reverseBorderIt, reverseBorderTable, wasReverseBorderNext);
         });
 
         closeButton.setOnAction(ActionEvent -> {
@@ -146,10 +207,22 @@ public class BSController extends SearchController {
         });
     }
 
+    private void BanBorderOperation(NodeTableView borderTable, Button borderNextButton, Button borderPrevButton) {
+        borderTable.setNode(null);
+        borderNextButton.setDisable(true);
+        borderPrevButton.setDisable(true);
+    }
+
+    private void UpdateBorderIt() {
+        directBorderIt = ((LinkedList<Node>)search.getDirectSearch().getBorder()).listIterator();
+        reverseBorderIt = ((LinkedList<Node>)search.getReverseSearch().getBorder()).listIterator();
+    }
+
     private void NewValueSetting(Node directNode, Node reverseNode) {
         NewValueSetting(directNode, search.getDirectSearch(), directData);
         NewValueSetting(reverseNode, search.getReverseSearch(), reverseData);
         setInfoToLabel(stepInfo, Integer.toString(search.getStepCount()));
+        setInfoToLabel(nodesCountLabel, Integer.toString(search.getNodesCount()));
     }
 
     private void NewValueSetting(Node Node, UnidirectionalSearch search, UpdatedData data) {
@@ -161,6 +234,20 @@ public class BSController extends SearchController {
         } else {
             setInfoToLabel(data.depthLabel, "-");
             setInfoToLabel(data.costInfo, "-");
+        }
+    }
+
+    protected void nextBorder(ListIterator<Node> it, NodeTableView table, BoolRef wasBorderNext) {
+        if (it.hasNext()) {
+            table.setNode(it.next());
+            wasBorderNext.value = true;
+        }
+    }
+
+    protected void prevBorder(ListIterator<Node> it, NodeTableView table, BoolRef wasBorderNext) {
+        if (it.hasPrevious()) {
+            table.setNode(it.previous());
+            wasBorderNext.value = false;
         }
     }
 
@@ -189,7 +276,15 @@ public class BSController extends SearchController {
         }
     }
 
-    protected class UpdatedData {
+    private class BoolRef {
+        public BoolRef(boolean value) {
+            this.value = value;
+        }
+
+        public boolean value;
+    }
+
+    private class UpdatedData {
         @FXML
         public Label costInfo;
         @FXML

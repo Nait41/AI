@@ -18,54 +18,76 @@
                         <Font name="Impact" size="39.0" />
                     </font>
                 </Text>
-            <Button fx:id="closeButton" layoutX="938.0" layoutY="17.0" minWidth="38.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="66.0" style="-fx-background-color: #FF6347;" text="Назад" textFill="WHITE">
-               <font>
-                  <Font name="Impact" size="14.0" />
-               </font>
-               <effect>
-                  <DropShadow />
-               </effect>
-            </Button>
-            <AnchorPane layoutY="57.0" prefHeight="24.0" prefWidth="1018.0" style="-fx-background-color: #FFA500;" />
+                <Button fx:id="closeButton" layoutX="938.0" layoutY="17.0" minWidth="38.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="66.0" style="-fx-background-color: #FF6347;" text="Назад" textFill="WHITE">
+                    <font>
+                        <Font name="Impact" size="14.0" />
+                    </font>
+                    <effect>
+                        <DropShadow />
+                    </effect>
+                </Button>
+                <AnchorPane layoutY="57.0" prefHeight="24.0" prefWidth="1018.0" style="-fx-background-color: #FFA500;" />
             </children>
         </AnchorPane>
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <AnchorPane layoutY="81.0" prefHeight="81.0" prefWidth="1018.0" style="-fx-background-color: #F5DEB3;">
-         <children>
-            <Button fx:id="runStep" layoutX="431.0" layoutY="6.0" mnemonicParsing="false" style="-fx-background-color: #FFA500;" text="Выполнить шаг" textFill="WHITE">
-               <font>
-                  <Font name="Impact" size="16.0" />
-               </font>
-            </Button>
-            <Button fx:id="runAuto" layoutX="401.0" layoutY="44.0" mnemonicParsing="false" style="-fx-background-color: #FFA500;" text="Автоматический режим" textFill="WHITE">
-               <font>
-                  <Font name="Impact" size="16.0" />
-               </font>
-            </Button>
-         </children>
-      </AnchorPane>
-      <Line endX="-460.0" endY="-75.0" layoutX="460.0" layoutY="237.0" startX="557.9999389648438" startY="-75.0" stroke="ORANGE" />
-      <Label layoutX="411.0" layoutY="179.0" prefHeight="24.0" prefWidth="214.0" text="Текущее состояние:" textFill="ORANGE">
-         <font>
-            <Font name="Impact" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="depthLabel" layoutX="457.0" layoutY="430.0" text="Глубина: 0" textFill="ORANGE">
-         <font>
-            <Font name="Impact" size="20.0" />
-         </font>
-      </Label>
-      <NodeTableView fx:id="mainTable_1" layoutX="446.0" layoutY="218.0" prefHeight="100.0" prefWidth="100.0" />
-      <NodeTableView fx:id="mainTable_2" layoutX="288.0" layoutY="476.0" prefHeight="100.0" prefWidth="100.0" />
-      <NodeTableView fx:id="mainTable_3" layoutX="391.0" layoutY="476.0" prefHeight="100.0" prefWidth="100.0" />
-      <NodeTableView fx:id="mainTable_4" layoutX="494.0" layoutY="476.0" prefHeight="100.0" prefWidth="100.0" />
-      <NodeTableView fx:id="mainTable_5" layoutX="597.0" layoutY="476.0" prefHeight="100.0" prefWidth="100.0" />
-      <Label fx:id="costInfo" layoutX="417.0" layoutY="383.0" prefHeight="24.0" prefWidth="214.0" text="Стоимость пути: 0" textFill="ORANGE">
-         <font>
-            <Font name="Impact" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="stepInfo" layoutX="405.0" layoutY="336.0" prefHeight="24.0" prefWidth="253.0" text="Количество шагов: 0" textFill="ORANGE">
+        <AnchorPane layoutY="81.0" prefHeight="81.0" prefWidth="1018.0" style="-fx-background-color: #F5DEB3;">
+            <children>
+                <Button fx:id="runStep" layoutX="431.0" layoutY="6.0" mnemonicParsing="false" style="-fx-background-color: #FFA500;" text="Выполнить шаг" textFill="WHITE">
+                    <font>
+                        <Font name="Impact" size="16.0" />
+                    </font>
+                </Button>
+                <Button fx:id="runAuto" layoutX="401.0" layoutY="44.0" mnemonicParsing="false" style="-fx-background-color: #FFA500;" text="Автоматический режим" textFill="WHITE">
+                    <font>
+                        <Font name="Impact" size="16.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+        <Line endX="-460.0" endY="-75.0" layoutX="460.0" layoutY="237.0" startX="557.9999389648438" startY="-75.0" stroke="ORANGE" />
+        <Label layoutX="197.0" layoutY="178.0" prefHeight="24.0" prefWidth="178.0" text="Текущее состояние" textFill="ORANGE">
+            <font>
+                <Font name="Impact" size="20.0" />
+            </font>
+        </Label>
+        <Label fx:id="depthLabel" layoutX="687.0" layoutY="511.0" prefHeight="24.0" prefWidth="147.0" text="Глубина: 0" textFill="ORANGE">
+            <font>
+                <Font name="Impact" size="20.0" />
+            </font>
+        </Label>
+        <NodeTableView fx:id="mainTable_1" layoutX="236.0" layoutY="216.0" prefHeight="100.0" prefWidth="100.0" />
+        <NodeTableView fx:id="mainTable_2" layoutX="170.0" layoutY="370.0" prefHeight="100.0" prefWidth="100.0" />
+        <NodeTableView fx:id="mainTable_3" layoutX="302.0" layoutY="370.0" prefHeight="100.0" prefWidth="100.0" />
+        <NodeTableView fx:id="mainTable_4" layoutX="170.0" layoutY="492.0" prefHeight="100.0" prefWidth="100.0" />
+        <NodeTableView fx:id="mainTable_5" layoutX="302.0" layoutY="492.0" prefHeight="100.0" prefWidth="100.0" />
+        <Label fx:id="costInfo" layoutX="653.0" layoutY="464.0" prefHeight="24.0" prefWidth="214.0" text="Стоимость пути: 0" textFill="ORANGE">
+            <font>
+                <Font name="Impact" size="20.0" />
+            </font>
+        </Label>
+        <Label fx:id="stepInfo" layoutX="646.0" layoutY="417.0" prefHeight="24.0" prefWidth="253.0" text="Количество шагов: 0" textFill="ORANGE">
+            <font>
+                <Font name="Impact" size="20.0" />
+            </font>
+        </Label>
+        <NodeTableView fx:id="borderTable" layoutX="683.0" layoutY="216.0" prefHeight="100.0" prefWidth="100.0" />
+        <Button fx:id="borderNextButton" layoutX="683.0" layoutY="323.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="🡺" />
+        <Label fx:id="borderLabel" layoutX="247.0" layoutY="336.0" prefHeight="24.0" prefWidth="78.0" text="Потомки" textFill="ORANGE">
+            <font>
+                <Font name="Impact" size="20.0" />
+            </font>
+        </Label>
+        <Label layoutX="703.0" layoutY="178.0" prefHeight="24.0" prefWidth="59.0" text="Кайма" textFill="ORANGE">
+            <font>
+                <Font name="Impact" size="20.0" />
+            </font>
+        </Label>
+        <Label fx:id="nodesCountInfo" layoutX="646.0" layoutY="370.0" prefHeight="24.0" prefWidth="253.0" text="Количество узлов: 0" textFill="ORANGE">
+            <font>
+                <Font name="Impact" size="20.0" />
+            </font>
+        </Label>
+      <Label fx:id="heuristicLabel" layoutX="668.0" layoutY="555.0" prefHeight="24.0" prefWidth="130.0" text="Эвристика: 0" textFill="ORANGE">
          <font>
             <Font name="Impact" size="20.0" />
          </font>

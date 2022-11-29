@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Stack;
 
-public class DFSController extends UnidirectionalSearchController<Stack<Node>> {
+public class DFSController extends SearchController {
     @FXML
     private Label depthLabel;
 
@@ -53,13 +53,13 @@ public class DFSController extends UnidirectionalSearchController<Stack<Node>> {
     private NodeTableView mainTable_5;
 
     @FXML
-    public Label borderLabel;
+    private Label borderLabel;
 
     @FXML
-    public Button borderNextButton;
+    private Button borderNextButton;
 
     @FXML
-    public Button borderPrevButton;
+    private Button borderPrevButton;
 
     @FXML
     private Button runAuto;
@@ -68,9 +68,15 @@ public class DFSController extends UnidirectionalSearchController<Stack<Node>> {
     private Button runStep;
 
     @FXML
-    public Label nodesCountInfo;
+    private NodeTableView borderTable;
+
+    @FXML
+    private Label nodesCountInfo;
 
     ArrayList<NodeTableView> tableList = new ArrayList<>();
+    private ListIterator<Node> borderIt;
+    private DeepFirstSearch search;
+    private boolean wasBorderNext;
 
     public void tableInit() {
         tableList.add(mainTable_1);
@@ -163,7 +169,29 @@ public class DFSController extends UnidirectionalSearchController<Stack<Node>> {
         setInfoToLabel(nodesCountInfo, Integer.toString(search.getNodesCount()));
     }
 
+    @Override
+    protected void showAlert() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(null);
+        alert.setHeaderText(null);
+        alert.setContentText(search.getSolutionNode() != null ?
+                "Решение успешно найдено!" : "Решения не существует!");
+        alert.showAndWait();
+    }
 
+    protected void nextBorder() {
+        if (borderIt.hasNext()) {
+            borderTable.setNode(borderIt.next());
+            wasBorderNext = true;
+        }
+    }
+
+    protected void prevBorder() {
+        if (borderIt.hasPrevious()) {
+            borderTable.setNode(borderIt.previous());
+            wasBorderNext = false;
+        }
+    }
 
     private class MyService extends Service {
         @Override

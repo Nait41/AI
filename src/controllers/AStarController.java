@@ -13,16 +13,23 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import tree.Node;
 import tree.search.AStarSearch;
+import tree.search.DeepFirstSearch;
 import tree.search.heuristics.HeuristicI;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class AStarController extends SearchController {
+    @FXML
+    public Label heuristicLabel;
+
     @FXML
     private Label depthLabel;
 
@@ -53,7 +60,20 @@ public class AStarController extends SearchController {
     @FXML
     private NodeTableView mainTable_5;
 
+    @FXML
+    private NodeTableView borderTable;
+
+    @FXML
+    private Button borderNextButton;
+
+    @FXML
+    private Label borderLabel;
+
+    @FXML
+    private Label nodesCountInfo;
+
     ArrayList<NodeTableView> tableList = new ArrayList<>();
+    protected Iterator<Pair<Node, Integer>> borderIt;
 
     @FXML
     private Button runAuto;
@@ -61,17 +81,7 @@ public class AStarController extends SearchController {
     @FXML
     private Button runStep;
 
-    /*private Node initNode;
-    private Node goalNode;
-    private HeuristicI Heuristic;*/
     private AStarSearch search;
-
-    /*public AStarController(Node initNode, Node goalNode, HeuristicI Heuristic) {
-        this.initNode = initNode;
-        this.goalNode = goalNode;
-        this.Heuristic = Heuristic;
-        mainTable_1.setNode(initNode);
-    }*/
 
     public void tableInit() {
         tableList.add(mainTable_1);
@@ -88,6 +98,8 @@ public class AStarController extends SearchController {
     void initialize() throws FileNotFoundException, InterruptedException {
         search = new AStarSearch(AStarApp.initNode, AStarApp.goalNode, AStarApp.Heuristic);
         mainTable_1.setNode(AStarApp.initNode);
+        borderIt = search.getBorder().iterator();
+        borderTable.setNode(borderIt.next().getKey());
         tableInit();
         runAuto.setOnAction(ActionEvent -> {
             runAuto.setDisable(true);
@@ -97,6 +109,8 @@ public class AStarController extends SearchController {
             service.setOnSucceeded((EventHandler<WorkerStateEvent>) t -> {
                 NewValueSetting(search.getSolutionNode());
                 showAlert();
+                borderTable.setNode(null);
+                borderNextButton.setDisable(true);
                 closeButton.setDisable(false);
             });
             service.start();
@@ -104,6 +118,8 @@ public class AStarController extends SearchController {
 
         runStep.setOnAction(ActionEvent -> {
             if (search.next()) {
+                borderIt = search.getBorder().iterator();
+                nextBorder();
                 NewValueSetting(search.getCurrentNode());
             }
             else {
@@ -111,6 +127,10 @@ public class AStarController extends SearchController {
                 runAuto.setDisable(true);
                 runStep.setDisable(true);
             }
+        });
+
+        borderNextButton.setOnAction(ActionEvent -> {
+            nextBorder();
         });
 
         closeButton.setOnAction(ActionEvent -> {
@@ -137,6 +157,8 @@ public class AStarController extends SearchController {
             setInfoToLabel(costInfo, "-");
         }
         setInfoToLabel(stepInfo, Integer.toString(search.getStepCount()));
+        setInfoToLabel(nodesCountInfo, Integer.toString(search.getNodesCount()));
+        setInfoToLabel(heuristicLabel, Integer.toString(search.getHeuristic()));
     }
 
     @Override
@@ -163,6 +185,12 @@ public class AStarController extends SearchController {
                     tableList.get(i).setStyle("-fx-background-color: #FFF8DC");
                 }
             }
+        }
+    }
+
+    protected void nextBorder() {
+        if (borderIt.hasNext()) {
+            borderTable.setNode(borderIt.next().getKey());
         }
     }
 

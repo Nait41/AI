@@ -74,8 +74,11 @@ public class AStarSearch extends Search{
     public int getNodesCount() { return waitingNodes.size() + visitedNodes.size(); }
 
     public boolean visited(Node node) {
-        //return visitedNodes.containsKey(node);
         return visitedNodes.contains(node);
+    }
+
+    public int getHeuristic() {
+        return currentHeuristic;
     }
 
     public Node getCurrentNode() {
@@ -84,6 +87,10 @@ public class AStarSearch extends Search{
 
     protected void addToQueue(Node node){
         waitingNodes.add(new Pair<>(node, Heuristic.compute(node, goalNode)));
+    }
+
+    public Queue<Pair<Node, Integer>> getBorder() {
+        return waitingNodes;
     }
 
     protected static class CustomHeuristicComparator implements Comparator<Pair<Node, Integer>> {
