@@ -20,10 +20,8 @@ public abstract class SearchController extends BasicController {
                     tableList.get(i ).setNode(childs.get(i));
                     if (search.visited(childs.get(i)))
                         tableList.get(i).setStyle("-fx-background-color: #FF0000");
-                } else {
+                } else
                     tableList.get(i).setNode(null);
-                    //tableList.get(i).setStyle("-fx-background-color: #FFF8DC");
-                }
             }
         }
     }

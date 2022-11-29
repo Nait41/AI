@@ -14,10 +14,13 @@ import javafx.stage.Stage;
 import tree.Node;
 import tree.search.BidirectionalBreadthFirstSearch;
 import tree.search.BidirectionalSearch;
+import tree.search.BreadthFirstSearch;
+import tree.search.UnidirectionalSearch;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BSController extends SearchController {
     @FXML
@@ -30,7 +33,7 @@ public class BSController extends SearchController {
     public Label directCostInfo;
 
     @FXML
-    public Label reserveCostInfo;
+    public Label reverseCostInfo;
 
     @FXML
     public Label stepInfo;
@@ -79,9 +82,9 @@ public class BSController extends SearchController {
     @FXML
     private Button runStep;
 
-    //private Node initNode;
-    //private Node goalNode;
     private BidirectionalSearch search;
+    private UpdatedData directData;
+    private UpdatedData reverseData;
 
     public void tableInit() {
         tableList.add(mainTable_1);
@@ -105,6 +108,8 @@ public class BSController extends SearchController {
         mainTable_1.setNode(BSApp.initNode);
         mainTable_6.setNode(BSApp.goalNode);
         tableInit();
+        directData = new UpdatedData(directCostInfo, directDepthLabel, mainTable_1, tableList.subList(1,5));
+        reverseData = new UpdatedData(reverseCostInfo, reverseDepthLabel, mainTable_6, tableList.subList(6,10));
         runAuto.setOnAction(ActionEvent -> {
             runAuto.setDisable(true);
             runStep.setDisable(true);
@@ -131,7 +136,6 @@ public class BSController extends SearchController {
 
         closeButton.setOnAction(ActionEvent -> {
             ChoiceApp choiceApp = new ChoiceApp(BSApp.initNode, BSApp.goalNode);
-            //ChoiceApp choiceApp = new ChoiceApp(initNode, goalNode);
             try {
                 choiceApp.start(new Stage());
             } catch (IOException e) {
@@ -142,34 +146,22 @@ public class BSController extends SearchController {
         });
     }
 
-    /*public void preset(Node initNode, Node goalNode) {
-        this.initNode = initNode;
-        this.goalNode = goalNode;
-        search = new BidirectionalBreadthFirstSearch(initNode, goalNode);
-        mainTable_1.setNode(initNode);
-        mainTable_6.setNode(goalNode);
-    }*/
-
     private void NewValueSetting(Node directNode, Node reverseNode) {
-        if (directNode != null) {
-            mainTable_1.setNode(directNode);
-            setInfoToLabel(directDepthLabel, Integer.toString(directNode.getDepth()));
-            setInfoToLabel(directCostInfo, Integer.toString(reverseNode.getPathCost()));
-            setChilds(tableList.subList(1,5), search.getDirectSearch(), directNode);
-        } else {
-            setInfoToLabel(directDepthLabel, "-");
-            setInfoToLabel(directCostInfo, "-");
-        }
-        if (reverseNode != null) {
-            mainTable_6.setNode(reverseNode);
-            setInfoToLabel(reverseDepthLabel, Integer.toString(reverseNode.getDepth()));
-            setInfoToLabel(reserveCostInfo, Integer.toString(reverseNode.getPathCost()));
-            setChilds(tableList.subList(6,10), search.getReverseSearch(), reverseNode);
-        } else {
-            setInfoToLabel(reverseDepthLabel, "-");
-            setInfoToLabel(reserveCostInfo, "-");
-        }
+        NewValueSetting(directNode, search.getDirectSearch(), directData);
+        NewValueSetting(reverseNode, search.getReverseSearch(), reverseData);
         setInfoToLabel(stepInfo, Integer.toString(search.getStepCount()));
+    }
+
+    private void NewValueSetting(Node Node, UnidirectionalSearch search, UpdatedData data) {
+        if (Node != null) {
+            data.table.setNode(Node);
+            setInfoToLabel(data.depthLabel, Integer.toString(Node.getDepth()));
+            setInfoToLabel(data.costInfo, Integer.toString(Node.getPathCost()));
+            setChilds(data.tables, search, Node);
+        } else {
+            setInfoToLabel(data.depthLabel, "-");
+            setInfoToLabel(data.costInfo, "-");
+        }
     }
 
     @Override
@@ -194,6 +186,23 @@ public class BSController extends SearchController {
                     return null;
                 }
             };
+        }
+    }
+
+    protected class UpdatedData {
+        @FXML
+        public Label costInfo;
+        @FXML
+        public Label depthLabel;
+        @FXML
+        public NodeTableView table;
+        public List tables;
+
+        public UpdatedData(Label costInfo, Label depthLabel, NodeTableView table, List tables) {
+            this.costInfo = costInfo;
+            this.depthLabel = depthLabel;
+            this.table = table;
+            this.tables = tables;
         }
     }
 }

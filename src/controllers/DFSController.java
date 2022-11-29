@@ -18,9 +18,10 @@ import tree.search.UnidirectionalSearch;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ListIterator;
+import java.util.Stack;
 
-public class DFSController extends SearchController {
-
+public class DFSController extends UnidirectionalSearchController<Stack<Node>> {
     @FXML
     private Label depthLabel;
 
@@ -51,7 +52,14 @@ public class DFSController extends SearchController {
     @FXML
     private NodeTableView mainTable_5;
 
-    ArrayList<NodeTableView> tableList = new ArrayList<>();
+    @FXML
+    public Label borderLabel;
+
+    @FXML
+    public Button borderNextButton;
+
+    @FXML
+    public Button borderPrevButton;
 
     @FXML
     private Button runAuto;
@@ -59,16 +67,10 @@ public class DFSController extends SearchController {
     @FXML
     private Button runStep;
 
-    //private Node initNode;
-    //private Node goalNode;
-    private UnidirectionalSearch search;
+    @FXML
+    public Label nodesCountInfo;
 
-    /*public void preset(Node initNode, Node goalNode) {
-        this.initNode = initNode;
-        this.goalNode = goalNode;
-        search = new DeepFirstSearch(initNode, goalNode);
-        mainTable_1.setNode(initNode);
-    }*/
+    ArrayList<NodeTableView> tableList = new ArrayList<>();
 
     public void tableInit() {
         tableList.add(mainTable_1);
@@ -85,6 +87,9 @@ public class DFSController extends SearchController {
     void initialize() throws FileNotFoundException, InterruptedException {
         search = new DeepFirstSearch(DFSApp.initNode, DFSApp.goalNode);
         mainTable_1.setNode(DFSApp.initNode);
+        borderIt = search.getBorder().listIterator();
+        borderTable.setNode(borderIt.next());
+        wasBorderNext = true;
         tableInit();
         runAuto.setOnAction(ActionEvent -> {
             runAuto.setDisable(true);
@@ -94,6 +99,9 @@ public class DFSController extends SearchController {
             service.setOnSucceeded((EventHandler<WorkerStateEvent>) t -> {
                 NewValueSetting(search.getSolutionNode());
                 showAlert();
+                borderTable.setNode(null);
+                borderNextButton.setDisable(true);
+                borderPrevButton.setDisable(true);
                 closeButton.setDisable(false);
             });
             service.start();
@@ -101,17 +109,21 @@ public class DFSController extends SearchController {
 
         runStep.setOnAction(ActionEvent -> {
             if (search.next()) {
+                borderIt = search.getBorder().listIterator();
+                nextBorder();
                 NewValueSetting(search.getCurrentNode());
             }
             else {
                 showAlert();
                 runAuto.setDisable(true);
                 runStep.setDisable(true);
+                borderTable.setNode(null);
+                borderNextButton.setDisable(true);
+                borderPrevButton.setDisable(true);
             }
         });
 
         closeButton.setOnAction(ActionEvent -> {
-            //ChoiceApp choiceApp = new ChoiceApp(initNode, goalNode);
             ChoiceApp choiceApp = new ChoiceApp(DFSApp.initNode, DFSApp.goalNode);
             try {
                 choiceApp.start(new Stage());
@@ -121,9 +133,23 @@ public class DFSController extends SearchController {
             Stage stage = (Stage) closeButton.getScene().getWindow();
             stage.close();
         });
+
+        borderNextButton.setOnAction(ActionEvent -> {
+            if (!wasBorderNext) {
+                nextBorder();
+            }
+            nextBorder();
+        });
+
+        borderPrevButton.setOnAction(ActionEvent -> {
+            if (wasBorderNext) {
+                prevBorder();
+            }
+            prevBorder();
+        });
     }
 
-    private void NewValueSetting(Node node) {
+    protected void NewValueSetting(Node node) {
         if (node != null) {
             mainTable_1.setNode(node);
             setInfoToLabel(depthLabel, Integer.toString(node.getDepth()));
@@ -134,17 +160,10 @@ public class DFSController extends SearchController {
             setInfoToLabel(costInfo, "-");
         }
         setInfoToLabel(stepInfo, Integer.toString(search.getStepCount()));
+        setInfoToLabel(nodesCountInfo, Integer.toString(search.getNodesCount()));
     }
 
-    @Override
-    protected void showAlert() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(null);
-        alert.setHeaderText(null);
-        alert.setContentText(search.getSolutionNode() != null ?
-                "Решение успешно найдено!" : "Решения не существует!");
-        alert.showAndWait();
-    }
+
 
     private class MyService extends Service {
         @Override

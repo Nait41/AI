@@ -5,23 +5,19 @@ import tree.Node;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class DeepFirstSearch extends UnidirectionalSearch {
-    protected Stack<Node> searchStack;
-
+public class DeepFirstSearch extends UnidirectionalSearch<Stack<Node>> {
     public DeepFirstSearch(Node initNode, Node goalNode) {
         super(initNode, goalNode);
-        searchStack = new Stack<>();
-        searchStack.push(initNode);
+        border = new Stack<>();
+        border.push(initNode);
     }
 
     public boolean next() {
-        if (!searchStack.isEmpty() && !isOver) {
+        if (!border.isEmpty() && !isOver) {
             stepCount++;
-            currentNode = searchStack.pop();
+            currentNode = border.pop();
             waitingNodes.remove(currentNode);
-            //visitedNodes.put(currentNode,currentNode);
             visitedNodes.add(currentNode);
-            //ArrayList<Node> childNodes = currentNode.getRemainingValidChilds();
             ArrayList<Node> childNodes = currentNode.getChilds();
             for (var childNode : childNodes) {
                 if (isGoal(childNode)) {
@@ -29,13 +25,12 @@ public class DeepFirstSearch extends UnidirectionalSearch {
                     isOver = true;
                     break;
                 } else if (!isRepetition(childNode)) {
-                    //waitingNodes.put(childNode,childNode);
                     waitingNodes.add(childNode);
-                    searchStack.push(childNode);
+                    border.push(childNode);
                 }
             }
         } else {
-            isOver = searchStack.isEmpty();
+            isOver = border.isEmpty();
         }
         return !isOver;
     }

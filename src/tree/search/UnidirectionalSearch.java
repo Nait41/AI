@@ -5,37 +5,28 @@ import tree.Node;
 
 import java.util.HashMap;
 
-public abstract class UnidirectionalSearch extends Search {
+public abstract class UnidirectionalSearch<Border> extends Search {
     protected Node solutionNode;
     protected Node currentNode;
-    //protected HashMap<Node, Node> waitingNodes;
-    //protected HashMap<Node, Node> visitedNodes;
     protected AccessibleHashSet<Node> waitingNodes;
     protected AccessibleHashSet<Node> visitedNodes;
     protected int stepCount;
+    protected Border border;
 
     public UnidirectionalSearch(Node initNode, Node goalNode) {
         super(initNode, goalNode);
         currentNode = initNode;
         stepCount = 0;
-        //visitedNodes = new HashMap<>();
-        //waitingNodes = new HashMap<>();
-        //waitingNodes.put(initNode,initNode);
         visitedNodes = new AccessibleHashSet<>();
         waitingNodes = new AccessibleHashSet<>();
         waitingNodes.add(initNode);
     }
 
     public Node getNodeWithSameState(Node node) {
-        /*if (waitingNodes.containsKey(node))
-            return waitingNodes.get(node);
-        else if (visitedNodes.containsKey(node))
-            return waitingNodes.get(node);
-        return null;*/
         if (waitingNodes.contains(node))
             return waitingNodes.get(node);
         else if (visitedNodes.contains(node))
-            return waitingNodes.get(node);
+            return visitedNodes.get(node);
         return null;
     }
 
@@ -52,7 +43,6 @@ public abstract class UnidirectionalSearch extends Search {
     }
 
     public boolean isWaiting(Node node) {
-        //return waitingNodes.containsKey(node);
         return waitingNodes.contains(node);
     }
 
@@ -61,11 +51,14 @@ public abstract class UnidirectionalSearch extends Search {
     }
 
     public boolean visited(Node node) {
-        //return visitedNodes.containsKey(node);
         return visitedNodes.contains(node);
     }
 
     public Node getCurrentNode() {
         return currentNode;
+    }
+
+    public Border getBorder() {
+        return border;
     }
 }

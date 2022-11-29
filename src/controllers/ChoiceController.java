@@ -9,9 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import tree.Node;
 
-import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -82,13 +80,6 @@ public class ChoiceController extends BasicController {
             stage.close();
         });
     }
-
-    /*public void preset(Node initNode, Node goalNode) {
-        this.initNode = initNode;
-        this.goalNode = goalNode;
-        initStateTable.setNode(initNode);
-        goalStateTable.setNode(goalNode);
-    }*/
 
     protected void tableInit() {
         initStateTable.setNode(ChoiceApp.initNode);
