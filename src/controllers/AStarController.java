@@ -1,7 +1,12 @@
 package controllers;
 
 import apps.ChoiceApp;
+import apps.AStarApp;
 import domain.NodeTableView;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -9,11 +14,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import tree.Node;
-import tree.search.UnidirectionalSearch;
+import tree.search.AStarSearch;
+import tree.search.heuristics.HeuristicI;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AStarController extends SearchController {
     @FXML
@@ -21,6 +28,9 @@ public class AStarController extends SearchController {
 
     @FXML
     private Label costInfo;
+
+    @FXML
+    private Label stepInfo;
 
     @FXML
     private Button closeButton;
@@ -51,15 +61,17 @@ public class AStarController extends SearchController {
     @FXML
     private Button runStep;
 
-    private Node initNode;
+    /*private Node initNode;
     private Node goalNode;
-    private UnidirectionalSearch search;
+    private HeuristicI Heuristic;*/
+    private AStarSearch search;
 
-    public void preset(Node initNode, Node goalNode) {
+    /*public AStarController(Node initNode, Node goalNode, HeuristicI Heuristic) {
         this.initNode = initNode;
         this.goalNode = goalNode;
+        this.Heuristic = Heuristic;
         mainTable_1.setNode(initNode);
-    }
+    }*/
 
     public void tableInit() {
         tableList.add(mainTable_1);
@@ -74,17 +86,35 @@ public class AStarController extends SearchController {
 
     @FXML
     void initialize() throws FileNotFoundException, InterruptedException {
+        search = new AStarSearch(AStarApp.initNode, AStarApp.goalNode, AStarApp.Heuristic);
+        mainTable_1.setNode(AStarApp.initNode);
         tableInit();
         runAuto.setOnAction(ActionEvent -> {
-
+            runAuto.setDisable(true);
+            runStep.setDisable(true);
+            closeButton.setDisable(true);
+            AStarController.MyService service = new AStarController.MyService();
+            service.setOnSucceeded((EventHandler<WorkerStateEvent>) t -> {
+                NewValueSetting(search.getSolutionNode());
+                showAlert();
+                closeButton.setDisable(false);
+            });
+            service.start();
         });
 
         runStep.setOnAction(ActionEvent -> {
-
+            if (search.next()) {
+                NewValueSetting(search.getCurrentNode());
+            }
+            else {
+                showAlert();
+                runAuto.setDisable(true);
+                runStep.setDisable(true);
+            }
         });
 
         closeButton.setOnAction(ActionEvent -> {
-            ChoiceApp choiceApp = new ChoiceApp(initNode, goalNode);
+            ChoiceApp choiceApp = new ChoiceApp(AStarApp.initNode, AStarApp.goalNode);
             try {
                 choiceApp.start(new Stage());
             } catch (IOException e) {
@@ -95,6 +125,20 @@ public class AStarController extends SearchController {
         });
     }
 
+    private void NewValueSetting(Node node) {
+        if (node != null) {
+            mainTable_1.setNode(node);
+
+            setInfoToLabel(depthLabel, Integer.toString(node.getDepth()));
+            setInfoToLabel(costInfo, Integer.toString(node.getPathCost()));
+            setChilds(tableList.subList(1,5), search, node);
+        } else {
+            setInfoToLabel(depthLabel, "-");
+            setInfoToLabel(costInfo, "-");
+        }
+        setInfoToLabel(stepInfo, Integer.toString(search.getStepCount()));
+    }
+
     @Override
     protected void showAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -103,5 +147,37 @@ public class AStarController extends SearchController {
         alert.setContentText(search.getSolutionNode() != null ?
                 "Решение успешно найдено!" : "Решения не существует!");
         alert.showAndWait();
+    }
+
+    protected void setChilds(List<NodeTableView> tableList, AStarSearch search, Node node) {
+        if (node != null) {
+            ArrayList<Node> childs = node.getChilds();
+            for (int i = 0; i < 4; ++i) {
+                tableList.get(i).setStyle("-fx-background-color: #FFF8DC");
+                if (i < childs.size()) {
+                    tableList.get(i ).setNode(childs.get(i));
+                    if (search.visited(childs.get(i)))
+                        tableList.get(i).setStyle("-fx-background-color: #FF0000");
+                } else {
+                    tableList.get(i).setNode(null);
+                    tableList.get(i).setStyle("-fx-background-color: #FFF8DC");
+                }
+            }
+        }
+    }
+
+    private class MyService extends Service {
+        @Override
+        protected Task createTask() {
+            return new Task() {
+                @Override
+                protected Object call() throws Exception {
+                    if (!search.isOver()) {
+                        while (search.next());
+                    }
+                    return null;
+                }
+            };
+        }
     }
 }

@@ -29,7 +29,7 @@
             </children>
         </AnchorPane>
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Button fx:id="dfsButton" layoutX="226.0" layoutY="148.0" minWidth="38.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="181.0" style="-fx-background-color: #FFA500;" text="Поиск в глубину" textFill="WHITE">
+      <Button fx:id="dfsButton" layoutX="324.0" layoutY="104.0" minWidth="38.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="181.0" style="-fx-background-color: #FFA500;" text="Поиск в глубину" textFill="WHITE">
          <font>
             <Font name="Impact" size="14.0" />
          </font>
@@ -37,7 +37,7 @@
             <DropShadow />
          </effect>
       </Button>
-      <Button fx:id="bsButton" layoutX="14.0" layoutY="148.0" minWidth="38.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="181.0" style="-fx-background-color: #FFA500;" text="Двунаправленный поиск" textFill="WHITE">
+      <Button fx:id="bsButton" layoutX="129.0" layoutY="104.0" minWidth="38.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="181.0" style="-fx-background-color: #FFA500;" text="Двунаправленный поиск" textFill="WHITE">
          <font>
             <Font name="Impact" size="14.0" />
          </font>
@@ -57,7 +57,7 @@
             <Font name="Impact" size="20.0" />
          </font>
       </Label>
-      <Button fx:id="aStarButton" layoutX="437.0" layoutY="148.0" minWidth="38.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="181.0" style="-fx-background-color: #FFA500;" text="A star" textFill="WHITE">
+      <Button fx:id="aStarH1Button" layoutX="129.0" layoutY="151.0" minWidth="38.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="181.0" style="-fx-background-color: #FFA500;" text="A* с эвр. функцией h1" textFill="WHITE">
          <font>
             <Font name="Impact" size="14.0" />
          </font>
@@ -65,5 +65,13 @@
             <DropShadow />
          </effect>
       </Button>
+        <Button fx:id="aStarH2Button" layoutX="324.0" layoutY="151.0" minWidth="38.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="181.0" style="-fx-background-color: #FFA500;" text="A* с эвр. функцией h2" textFill="WHITE">
+            <font>
+                <Font name="Impact" size="14.0" />
+            </font>
+            <effect>
+                <DropShadow />
+            </effect>
+        </Button>
     </children>
 </AnchorPane>
