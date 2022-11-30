@@ -124,6 +124,8 @@ public class AStarController extends SearchController {
             }
             else {
                 showAlert();
+                borderTable.setNode(null);
+                borderNextButton.setDisable(true);
                 runAuto.setDisable(true);
                 runStep.setDisable(true);
             }

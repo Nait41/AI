@@ -164,6 +164,8 @@ public class BSController extends SearchController {
                 showAlert();
                 runAuto.setDisable(true);
                 runStep.setDisable(true);
+                BanBorderOperation(directBorderTable, directBroadNextButton, directBroadPrevButton);
+                BanBorderOperation(reverseBorderTable, reverseBroadNextButton, reverseBroadPrevButton);
             }
         });
 
