@@ -14,7 +14,6 @@ public class Node {
     private Action generatingAction;
     private int pathCost = 0;
     private int depth = 0;
-    //private int createIndex = 0;
     static private final ArrayList<Action> createActions = new ArrayList<>(){{
         add(new LeftAction());
         add(new RightAction());
@@ -41,32 +40,14 @@ public class Node {
         depth = parent.depth + 1;
     }
 
-    /*public Node getNextValidChild() {
-        Node child = null;
-        while (child == null && createIndex < 4) {
-            child = createActions.get(createIndex).apply(this);
-            ++createIndex;
-        }
-        return child;
-    }
-
-    public ArrayList<Node> getRemainingValidChilds() {
-        ArrayList<Node> childs = new ArrayList<>();
-        Node child;
-        do {
-            child = getNextValidChild();
-            if (child != null)
-                childs.add(child);
-        } while (child != null);
-        return childs;
-    }*/
-
     public ArrayList<Node> getChilds() {
         ArrayList<Node> childs = new ArrayList<>();
         for (var action : createActions) {
-            Node node = action.apply(this);
-            if (node != null)
-                childs.add(node);
+            if (generatingAction == null || !action.equals(generatingAction.getOpposite())) {
+                Node node = action.apply(this);
+                if (node != null)
+                    childs.add(node);
+            }
         }
         return childs;
     }
@@ -75,56 +56,24 @@ public class Node {
         return state;
     }
 
-    public void setState(ArrayList<ArrayList<Integer>> state) {
-        this.state = state;
-    }
-
     public Pair<Integer, Integer> getEmptyIndexes() {
         return emptyIndexes;
-    }
-
-    public void setEmptyIndexes(Pair<Integer, Integer> emptyIndexes) {
-        this.emptyIndexes = emptyIndexes;
     }
 
     public Node getParent() {
         return parent;
     }
 
-    public void setParent(Node parent) {
-        this.parent = parent;
-    }
-
     public Action getGeneratingAction() {
         return generatingAction;
-    }
-
-    public void setGeneratingAction(Action generatingAction) {
-        this.generatingAction = generatingAction;
     }
 
     public int getPathCost() {
         return pathCost;
     }
 
-    public void setPathCost(int pathCost) {
-        this.pathCost = pathCost;
-    }
-
-    /*public int getCreateIndex() {
-        return createIndex;
-    }
-
-    public void setCreateIndex(int createIndex) {
-        this.createIndex = createIndex;
-    }*/
-
     public int getDepth() {
         return depth;
-    }
-
-    public void setDepth(int depth) {
-        this.depth = depth;
     }
 
     public Pair<Integer, Integer> getDigitPosition(int digit) {

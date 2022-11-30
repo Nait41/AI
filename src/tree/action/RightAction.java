@@ -12,4 +12,9 @@ public class RightAction extends Action {
     public boolean isPossible(Node node) {
         return node.getEmptyIndexes().getValue() != 2;
     }
+
+    @Override
+    public Action getOpposite() {
+        return new LeftAction();
+    }
 }

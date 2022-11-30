@@ -9,6 +9,7 @@ public abstract class Action {
 
     public abstract Node apply(Node node);
     public abstract boolean isPossible(Node node);
+    public abstract Action getOpposite();
 
     protected Node apply(Node node, int rowOffset, int columnOffset) {
         if (isPossible(node)) {

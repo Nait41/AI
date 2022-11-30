@@ -12,4 +12,9 @@ public class DownAction extends Action {
     public boolean isPossible(Node node) {
         return node.getEmptyIndexes().getKey() != 2;
     }
+
+    @Override
+    public Action getOpposite() {
+        return new UpAction();
+    }
 }
