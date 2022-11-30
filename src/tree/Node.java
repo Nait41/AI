@@ -100,7 +100,7 @@ public class Node {
     }
 
     private boolean isPosInRange(Pair<Integer, Integer> pos) {
-        return pos.getKey() >= 0 && pos.getKey() <= 8 && pos.getValue() >= 0 && pos.getValue() <= 8;
+        return pos.getKey() >= 0 && pos.getKey() <= 2 && pos.getValue() >= 0 && pos.getValue() <= 2;
     }
 
     @Override
